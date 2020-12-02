@@ -17,7 +17,7 @@ public class AtenderPeticion implements Runnable
 
 	private PrintStream mensajesSalida;
 	private DataInputStream mensajesEntrada;
-	private List<File> cancionesServidor; //asi tenemos las mismas canciones en todos lados
+	private List<File> cancionesServidor; 
 
 
 	public AtenderPeticion(Socket servidorHaciaCliente) throws IOException {
@@ -46,28 +46,31 @@ public class AtenderPeticion implements Runnable
 				String respuesta =mensajesEntrada.readLine();
 				int opcion = Integer.parseInt(respuesta);
 				switch (opcion) {
-				case 0: 
-				{
-					this.mostrarCanciones();
-					break;
-				}
-				case 1: 
-				{
-					this.mostrarCanciones();
-					int eleccion = Integer.parseInt( this.mensajesEntrada.readLine());
-					this.mandarCancion(eleccion);
-					break;
-				}
-				case 2: 
-				{
-					this.subirCancion();
-					break;
-				}
-				case 3:
-				{
-					seguir = false;
-					break;
-				}
+				
+					case 0: //El cliente solicita la lista de canciones
+					{
+						this.listarCanciones();
+						break;
+					}
+					
+					case 1:  //El cliente solicita descargar una cancion
+					{
+						String eleccion = this.mensajesEntrada.readLine();
+						this.mandarCancion(eleccion);
+						break;
+					}
+					
+					case 2: //El cliente desea subir una cancion
+					{
+						this.subirCancion();
+						break;
+					}
+					
+					case 3: //El cliente cierra la conexion
+					{
+						seguir = false;
+						break;
+					}
 				}
 			}
 
@@ -80,58 +83,98 @@ public class AtenderPeticion implements Runnable
 
 	}
 
-	public void mostrarCanciones()
+	public void listarCanciones()
+	//Envia por el canal de comunicacion los nombres de las canciones que hay disponibles
 	{
 
 		this.mensajesSalida.println(cancionesServidor.size());
 		this.mensajesSalida.flush();
 
-		int n =0;
+		
 		for(File f : cancionesServidor)
 		{
-			this.mensajesSalida.println(n +"- "+ f.getName());
-			this.mensajesSalida.flush();
-			n++;
+			this.mensajesSalida.println(f.getName());
+			this.mensajesSalida.flush();	
 		}
 
 	}
 
-	public void mandarCancion(int i) throws IOException 
+	public void mandarCancion(String cancionSolicitada)  
+	//Envia la cancion cuyo nombre corresponde con el string cancionSolicitada
 	{
-		File f = cancionesServidor.get(i);
-		FileInputStream fichero = new FileInputStream(f);
-
-		this.mensajesSalida.println(f.length());
-		this.mensajesSalida.flush();
-
-		byte buff[] = new byte[300000];
-		int leidos = fichero.read(buff);
-		while(leidos!=-1)
-		{
-			this.mensajesSalida.write(buff, 0, leidos);
+		String archivo= "cancionesPredefinidas/"+cancionSolicitada;
+		FileInputStream fichero = null;
+		
+		try {
+			File f = new File(archivo);
+			fichero = new FileInputStream(f);
+	
+			this.mensajesSalida.println(f.length());
 			this.mensajesSalida.flush();
-			leidos = fichero.read(buff);
+	
+			byte buff[] = new byte[300000];
+			int leidos = fichero.read(buff);
+			while(leidos!=-1)
+			{
+				this.mensajesSalida.write(buff, 0, leidos);
+				this.mensajesSalida.flush();
+				leidos = fichero.read(buff);
+			}
+			
+		} catch(IOException e1) {
+			e1.printStackTrace();
+		} finally {
+			try {
+				if(fichero!=null) {
+					fichero.close();
+				}
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			}
 		}
 	}
 
 	public void subirCancion() throws NumberFormatException, IOException
+	//El usuario sube una cancion que se almacena junto al resto 
 	{
-		String nombre = this.mensajesEntrada.readLine();
-		long tamFich = Long.parseLong(mensajesEntrada.readLine());
-		File cancion = new File("cancionesPredefinidas/"+nombre);
-		FileOutputStream f = new FileOutputStream(cancion, false);
-		byte buff[] = new byte[300000];
-		int leidos = mensajesEntrada.read(buff);
-		long suma =0;
-		suma += leidos;
-		while(suma<tamFich)
-		{
-			f.write(buff,0,leidos);
-			f.flush();
-			leidos = mensajesEntrada.read(buff);
+		FileOutputStream f = null;
+		
+		try {
+			String nombre = this.mensajesEntrada.readLine();
+			long tamFich = Long.parseLong(mensajesEntrada.readLine());
+			
+			File cancion = new File("cancionesPredefinidas/"+nombre);
+			f = new FileOutputStream(cancion, false);
+			
+			
+			
+			byte buff[] = new byte[300000];
+			int leidos = mensajesEntrada.read(buff);
+			long suma =0;
 			suma += leidos;
+			while(suma<tamFich)
+			{
+				f.write(buff,0,leidos);
+				f.flush();
+				leidos = mensajesEntrada.read(buff);
+				suma += leidos;
+			}
+			
+			//Actualizamos la lista de canciones disponibles en el servidor:
+			this.cancionesServidor.add(new File("Nombre"));
+		
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} finally {
+			try {
+				if(f!=null) {
+					f.close();
+				}
+			} catch (IOException e2) {
+				e2.printStackTrace();
+			}
 		}
-
+		
 	}
 
 

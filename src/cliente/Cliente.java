@@ -12,6 +12,8 @@ import java.io.PrintStream;
 
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import javazoom.jlgui.basicplayer.BasicPlayerException;
@@ -33,7 +35,7 @@ public class Cliente
 
 
 	public Cliente(String host, int puerto) {
-		super();
+		
 		this.host = host;
 		this.puerto = puerto;
 		this.reproductor= new Reproductor();
@@ -62,7 +64,7 @@ public class Cliente
 				mensajesSalida.println(opcion);
 				mensajesSalida.flush();
 				switch (opcion) {
-				case 0: 
+				case 0: //Solicitamos la lista de canciones al servidor
 				{
 					this.mostrarCanciones();
 					break;
@@ -113,21 +115,134 @@ public class Cliente
 		}
 	}
 
-	public void mostrarCanciones() throws NumberFormatException, IOException
+	
+	
+	public List<String> listaCanciones() throws NumberFormatException, IOException
+	//Devuelve una lista de canciones enviada por el servidor
 	{
-		System.out.println();
-		System.out.println();
-		System.out.println("-------------------CANCIONES-------------------");
-		int tam = Integer.parseInt(mensajesEntrada.readLine());
-		for(int i =0; i<tam;i++)
-		{
-			String s = mensajesEntrada.readLine();
-			System.out.println(s);
+		List<String> lista = new ArrayList<String> ();
+		
+		try {
+			int tam = Integer.parseInt(mensajesEntrada.readLine());
+			
+			for(int i =0; i<tam;i++)
+			{
+				String s = mensajesEntrada.readLine();
+				lista.add(s);
+			} 	
+			
+		} catch (NumberFormatException e1) {
+			e1.printStackTrace();
+		} catch (IOException e2) {
+			e2.printStackTrace();
 		} 
-		System.out.println("----------------------------------------------");
+		
+		return lista;	
 	}
+	
+	public void subirCancion(File f) 
+	//Envia al servidor el fichero y este lo almacena en su "BD"
+	{
+		try(FileInputStream fichero = new FileInputStream(f);)
+		{
+			
+			this.mensajesSalida.println(f.getName());
+			this.mensajesSalida.println(f.length());
+			this.mensajesSalida.flush();
+
+			byte buff[] = new byte[300000];
+			int leidos = fichero.read(buff);
+			while(leidos!=-1)
+			{
+				this.mensajesSalida.write(buff, 0, leidos);
+				this.mensajesSalida.flush();
+				leidos = fichero.read(buff);
+			}
+			
+		} catch (FileNotFoundException e1 ) {
+			e1.printStackTrace();
+		} catch (IOException e2) {
+			e2.printStackTrace();
+		}
+		
+	}
+	
+	public void descargarCancion(String s) 
+	//Pide al servidor la cancion dada por parametro y la descarga en el archivo mp3 del reproductor
+	{
+		File cancion = new File("cancion.mp3");
+		
+		try(	Scanner entrda = new Scanner(System.in);
+				FileOutputStream f = new FileOutputStream(cancion, false) )
+		{
+			
+			//Le decimos la cancion que queremos:
+			this.mensajesSalida.println(s);
+			this.mensajesSalida.flush();
+			
+			
+			//Descarga la cancion solicitada y la almacena en el fichero
+			long tamFich = Long.parseLong(mensajesEntrada.readLine());
+			byte buff[] = new byte[300000];
+			int leidos = mensajesEntrada.read(buff);
+			long suma =0;
+			suma += leidos;
+			while(suma<tamFich)
+			{
+				f.write(buff,0,leidos);
+				f.flush();
+				leidos = mensajesEntrada.read(buff);
+				suma += leidos;
+			}
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void reproducirCancion() 
+	//Reproduce la cancion que tenemos disponible en el momento
+	{
+		try {
+			
+			this.reproductor.abrirCancion(new File("cancion.mp3"));
+			this.reproductor.play();
+			
+		} catch (BasicPlayerException e1) {
+			e1.printStackTrace();
+		}  catch (FileNotFoundException e2) {
+			e2.printStackTrace();
+		}
+		
+	}
+	
+	public void pausarCancion() 
+	//Pausa la cancion que esta sonando 
+	{
+		
+		try {
+			this.reproductor.pause();
+		} catch (BasicPlayerException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void reanudarCancion() 
+	//Continua reproduciendo una canción previamente pausada
+	{
+		try {
+			this.reproductor.continuar();
+		} catch (BasicPlayerException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	public void elegirCancion() throws NumberFormatException, IOException, BasicPlayerException
+	//Yo creo que esto no lo tenemos que usar por que utiliza la consola 
 	{
 		File cancion = new File("cancion.mp3");
 		try(	Scanner entrda = new Scanner(System.in);
@@ -165,28 +280,10 @@ public class Cliente
 
 	}
 
-	public void subirCancion(File f) throws FileNotFoundException, IOException
-	{
-		try(FileInputStream fichero = new FileInputStream(f);)
-		{
-			
-			this.mensajesSalida.println(f.getName());
-			this.mensajesSalida.println(f.length());
-			this.mensajesSalida.flush();
-
-			byte buff[] = new byte[300000];
-			int leidos = fichero.read(buff);
-			while(leidos!=-1)
-			{
-				this.mensajesSalida.write(buff, 0, leidos);
-				this.mensajesSalida.flush();
-				leidos = fichero.read(buff);
-			}
-		}
-		
-	}
+	
 	
 	public File seleccionarArchivo()
+	//Esto creo que habria que hacerlo desde la interfaz gráfica
 	{
 		File fichero = null;
 		JFileChooser seleccionador = new JFileChooser();
@@ -201,8 +298,24 @@ public class Cliente
 		return fichero;
 		
 	}
-
+	
+	public void mostrarCanciones() throws NumberFormatException, IOException
+	{
+		List<String> lista = this.listaCanciones();
+		
+		System.out.println();
+		System.out.println();
+		System.out.println("-------------------CANCIONES-------------------");
+		
+		for(String s : lista) {
+			System.out.println(s);
+		}
+		
+		System.out.println("----------------------------------------------");
+	}
+	
 	public int opcionesMenu() throws IOException
+	//Esto tambien creo que lo tenemos que hacr en la interfaz gráfica
 	{
 		System.out.println("Elige una opcion:");
 		System.out.println("0 - Mostrar la lista de canciones del servidor");
