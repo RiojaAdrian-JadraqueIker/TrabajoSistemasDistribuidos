@@ -15,6 +15,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javazoom.jlgui.basicplayer.BasicPlayerException;
 import reproductor.Reproductor;
@@ -52,7 +54,6 @@ public class Cliente
 			DataInputStream in = new DataInputStream(cliente.getInputStream());
 			PrintStream	out = new PrintStream(cliente.getOutputStream()); )
 		{
-			
 			this.mensajesEntrada = in;
 			this.mensajesSalida = out;
 
@@ -279,7 +280,6 @@ public class Cliente
 		
 
 	}
-
 	
 	
 	public File seleccionarArchivo()
