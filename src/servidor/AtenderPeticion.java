@@ -161,7 +161,7 @@ public class AtenderPeticion implements Runnable
 			}
 			
 			//Actualizamos la lista de canciones disponibles en el servidor:
-			this.cancionesServidor.add(new File("Nombre"));
+			this.cancionesServidor.add(new File(nombre));
 		
 		} catch (IOException e1) {
 			e1.printStackTrace();
