@@ -43,8 +43,17 @@ public class Cliente
 		this.reproductor= new Reproductor();
 
 	}
+	
+	public void conectar() throws UnknownHostException, IOException //falta cerrar las cosas
+	{
+		Socket cliente = new Socket(this.host, this.puerto);
+		this.mensajesEntrada = new DataInputStream(cliente.getInputStream());
+		this.mensajesSalida = new PrintStream(cliente.getOutputStream());
+	}
+	
+	
 
-	public void conectar()
+	/*public void conectar() //para sin interfaz
 	{
 		this.mensajesEntrada=null;
 		this.mensajesSalida =null;
@@ -114,7 +123,7 @@ public class Cliente
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
+	}*/
 
 	
 	
@@ -124,6 +133,10 @@ public class Cliente
 		List<String> lista = new ArrayList<String> ();
 		
 		try {
+			//es el caso 0 del servidor luego mandamos la opcion 0
+			this.mensajesSalida.println(0);
+			this.mensajesSalida.flush();
+			
 			int tam = Integer.parseInt(mensajesEntrada.readLine());
 			
 			for(int i =0; i<tam;i++)
@@ -147,6 +160,7 @@ public class Cliente
 		try(FileInputStream fichero = new FileInputStream(f);)
 		{
 			
+			this.mensajesSalida.println(2);
 			this.mensajesSalida.println(f.getName());
 			this.mensajesSalida.println(f.length());
 			this.mensajesSalida.flush();
@@ -242,7 +256,7 @@ public class Cliente
 	}
 	
 
-	public void elegirCancion() throws NumberFormatException, IOException, BasicPlayerException
+	/*public void elegirCancion() throws NumberFormatException, IOException, BasicPlayerException
 	//Yo creo que esto no lo tenemos que usar por que utiliza la consola 
 	{
 		File cancion = new File("cancion.mp3");
@@ -279,27 +293,10 @@ public class Cliente
 		}
 		
 
-	}
+	}*/
 	
 	
-	public File seleccionarArchivo()
-	//Esto creo que habria que hacerlo desde la interfaz gráfica
-	{
-		File fichero = null;
-		JFileChooser seleccionador = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Musica mp3", "mp3");
-        seleccionador.setFileFilter(filter);
-		int n = seleccionador.showOpenDialog(seleccionador);
-		if (n == JFileChooser.APPROVE_OPTION) 
-		{
-			fichero = new File(seleccionador.getSelectedFile().getAbsolutePath());
-		}
-		
-		return fichero;
-		
-	}
-	
-	public void mostrarCanciones() throws NumberFormatException, IOException
+	/*public void mostrarCanciones() throws NumberFormatException, IOException
 	{
 		List<String> lista = this.listaCanciones();
 		
@@ -312,9 +309,9 @@ public class Cliente
 		}
 		
 		System.out.println("----------------------------------------------");
-	}
+	}*/
 	
-	public int opcionesMenu() throws IOException
+	/*public int opcionesMenu() throws IOException
 	//Esto tambien creo que lo tenemos que hacr en la interfaz gráfica
 	{
 		System.out.println("Elige una opcion:");
@@ -356,6 +353,6 @@ public class Cliente
 		}
 
 		return devuelto;
-	}
+	}*/
 
 }
