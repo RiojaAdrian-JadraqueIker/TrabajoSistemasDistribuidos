@@ -77,7 +77,7 @@ public class Interfaz_Grafica extends JFrame {
 		
 		JProgressBar pbDuracionCancion = new JProgressBar();
 		pbDuracionCancion.setToolTipText("Progreso de la cancion");
-		pbDuracionCancion.setBounds(89, 343, 588, 14);
+		pbDuracionCancion.setBounds(208, 343, 386, 14);
 		contentPane.add(pbDuracionCancion);
 		
 		tbNombreCancionActual = new JTextField();
