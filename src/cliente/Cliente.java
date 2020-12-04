@@ -34,6 +34,7 @@ public class Cliente
 	private Reproductor reproductor;
 	private DataInputStream mensajesEntrada;
 	private PrintStream mensajesSalida;
+	private Socket cliente;
 
 
 	public Cliente(String host, int puerto) {
@@ -47,7 +48,7 @@ public class Cliente
 	public void conectar()  //falta cerrar las cosas (metodoDesconectar())
 	{
 		try {
-			Socket cliente = new Socket(this.host, this.puerto);
+			this.cliente = new Socket(this.host, this.puerto);
 			this.mensajesEntrada = new DataInputStream(cliente.getInputStream());
 			this.mensajesSalida = new PrintStream(cliente.getOutputStream());
 		} catch (IOException e) {
@@ -55,6 +56,22 @@ public class Cliente
 		}
 	}
 	
+	public void desconetar() 
+	{
+		/*if(this.cliente!=null)
+		{
+			try
+			{
+				this.cliente.close();
+			}
+			catch(IOException e)
+			{
+				e.printStackTrace();
+			}
+		}*/
+		this.mensajesSalida.println(3);
+		this.mensajesSalida.flush();
+	}
 	
 
 	/*public void conectar() //para sin interfaz

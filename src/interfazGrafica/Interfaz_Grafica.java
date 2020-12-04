@@ -117,6 +117,10 @@ public class Interfaz_Grafica extends JFrame {
 		btSubirCancion.setBounds(38, 79, 156, 23);
 		panelAcciones.add(btSubirCancion);
 		
+		JButton btSalir = new JButton("Salir");
+		btSalir.setBounds(38, 113, 156, 23);
+		panelAcciones.add(btSalir);
+		
 		JRadioButton btAleatorio = new JRadioButton("Aleatorio");
 		btAleatorio.setToolTipText("Se reproduce de forma aleatoria");
 		btAleatorio.setBounds(600, 303, 78, 23);
@@ -147,7 +151,16 @@ public class Interfaz_Grafica extends JFrame {
 		
 		
 		//-----------------------------------
-		//---------------EVENTOS-------------
+		//---------------EVENTOS-------------	
+		
+		btSalir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				cliente.desconetar();
+				dispose();
+			}
+		});
+		
 		btPLay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
@@ -396,7 +409,4 @@ public class Interfaz_Grafica extends JFrame {
 	{
 		this.tbNombreCancionActual.setText(t);
 	}
-	
-	
-	
 }
