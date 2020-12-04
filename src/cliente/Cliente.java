@@ -177,6 +177,7 @@ public class Cliente
 				this.mensajesSalida.flush();
 				leidos = fichero.read(buff);
 			}
+			//this.listaCanciones();
 			
 		} catch (FileNotFoundException e1 ) {
 			e1.printStackTrace();

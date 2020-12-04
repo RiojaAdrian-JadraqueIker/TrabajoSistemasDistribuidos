@@ -10,6 +10,7 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import Botones.BotonRedondo;
 import cliente.Cliente;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
 
@@ -166,7 +167,7 @@ public class Interfaz_Grafica extends JFrame {
 			public void actionPerformed(ActionEvent e) 
 			{
 				try {
-					clickMostrarCanciones(lista);
+					clickMostrarCanciones(lista,volumen);
 				} catch (NumberFormatException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -185,6 +186,15 @@ public class Interfaz_Grafica extends JFrame {
 				if(fichero!=null)
 				{
 					cliente.subirCancion(fichero);
+					try {
+						cliente.pausarCancion();
+						clickMostrarCanciones(lista, volumen);
+						cliente.reanudarCancion();
+					} catch (NumberFormatException | IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
 				}
 				
 			}
@@ -352,7 +362,7 @@ public class Interfaz_Grafica extends JFrame {
 	}
 	
 	
-	private void clickMostrarCanciones(java.awt.List lista ) throws NumberFormatException, IOException
+	private void clickMostrarCanciones(java.awt.List lista,JSlider volumen ) throws NumberFormatException, IOException
 	{
 		List<String> listaCanciones = this.cliente.listaCanciones();
 
@@ -361,21 +371,28 @@ public class Interfaz_Grafica extends JFrame {
 		{
 			lista.add(s);
 		}
-		lista.addActionListener(new ActionListener() {
-			
-			//Cuando hacemos click en una cancion esta se descarga y se reproduce 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String s =lista.getSelectedItem();
-				cliente.descargarCancion(s);
-				mostrarNombreCancionActualSonando(s);
-				cliente.reproducirCancion();
-			}
-		});
+		if(lista.getActionListeners().length==0)
+		{
+			lista.addActionListener(new ActionListener() {
+				
+				//Cuando hacemos click en una cancion esta se descarga y se reproduce 
+				@Override
+				public void actionPerformed(ActionEvent e) 
+				{
+					String s =lista.getSelectedItem();
+					cliente.descargarCancion(s);
+					mostrarNombreCancionActualSonando(s);
+					cliente.reproducirCancion();
+					volumen(volumen);
+				}
+			});
+		}
+		
 
 	}
 	
-	public void mostrarNombreCancionActualSonando(String t)
+	
+	private void mostrarNombreCancionActualSonando(String t)
 	{
 		this.tbNombreCancionActual.setText(t);
 	}
