@@ -1,41 +1,29 @@
 package interfazGrafica;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import Botones.BotonRedondo;
+
 import cliente.Cliente;
-import javazoom.jlgui.basicplayer.BasicPlayerException;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
-import java.awt.FlowLayout;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import java.awt.Font;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.SwingConstants;
-import javax.swing.JList;
-import javax.swing.JTextPane;
-import javax.swing.ListModel;
 
-import java.awt.Button;
+
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -44,7 +32,6 @@ import java.util.Random;
 import java.awt.event.ActionEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import javax.swing.ImageIcon;
 
 public class Interfaz_Grafica extends JFrame {
 
@@ -55,7 +42,7 @@ public class Interfaz_Grafica extends JFrame {
 	
 	
 	
-	public Interfaz_Grafica(Cliente c) throws UnknownHostException, IOException 
+	public Interfaz_Grafica(Cliente c)
 	{
 		File f = new File("cancion.mp3");
 		if(f.exists())
@@ -66,7 +53,6 @@ public class Interfaz_Grafica extends JFrame {
 		setTitle("Reproductor musica");
 		this.cliente=c;
 		this.cliente.conectar();
-		//this.cliente.conectar();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 762, 407);
@@ -182,10 +168,7 @@ public class Interfaz_Grafica extends JFrame {
 				try {
 					clickMostrarCanciones(lista,volumen);
 				} catch (NumberFormatException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
+					
 					e1.printStackTrace();
 				}
 			}
@@ -203,8 +186,8 @@ public class Interfaz_Grafica extends JFrame {
 						cliente.pausarCancion();
 						clickMostrarCanciones(lista, volumen);
 						cliente.reanudarCancion();
-					} catch (NumberFormatException | IOException e1) {
-						// TODO Auto-generated catch block
+					} catch (NumberFormatException e1) {
+		
 						e1.printStackTrace();
 					}
 					
@@ -375,7 +358,7 @@ public class Interfaz_Grafica extends JFrame {
 	}
 	
 	
-	private void clickMostrarCanciones(java.awt.List lista,JSlider volumen ) throws NumberFormatException, IOException
+	private void clickMostrarCanciones(java.awt.List lista,JSlider volumen )
 	{
 		List<String> listaCanciones = this.cliente.listaCanciones();
 
@@ -389,7 +372,6 @@ public class Interfaz_Grafica extends JFrame {
 			lista.addActionListener(new ActionListener() {
 				
 				//Cuando hacemos click en una cancion esta se descarga y se reproduce 
-				@Override
 				public void actionPerformed(ActionEvent e) 
 				{
 					String s =lista.getSelectedItem();
@@ -403,7 +385,6 @@ public class Interfaz_Grafica extends JFrame {
 		
 
 	}
-	
 	
 	private void mostrarNombreCancionActualSonando(String t)
 	{

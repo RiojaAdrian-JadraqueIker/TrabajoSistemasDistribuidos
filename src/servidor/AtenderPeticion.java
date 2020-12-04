@@ -20,17 +20,26 @@ public class AtenderPeticion implements Runnable
 	private List<File> cancionesServidor; 
 
 
-	public AtenderPeticion(Socket servidorHaciaCliente) throws IOException {
+	public AtenderPeticion(Socket servidorHaciaCliente) 
+	{
 		super();
-		mensajesSalida = new PrintStream(servidorHaciaCliente.getOutputStream());
-		mensajesEntrada = new DataInputStream(servidorHaciaCliente.getInputStream());
-		this.cancionesServidor = new LinkedList<File>();
-		File cancionesPredefinidas = new File("cancionesPredefinidas");
-		File lista [] = cancionesPredefinidas.listFiles();
-		for (File file : lista) 
+		
+		try {
+			mensajesSalida = new PrintStream(servidorHaciaCliente.getOutputStream());
+			mensajesEntrada = new DataInputStream(servidorHaciaCliente.getInputStream());
+			this.cancionesServidor = new LinkedList<File>();
+			File cancionesPredefinidas = new File("cancionesPredefinidas");
+			File lista [] = cancionesPredefinidas.listFiles();
+			for (File file : lista) 
+			{
+				this.cancionesServidor.add(file);
+			}
+		} catch (IOException e) 
 		{
-			this.cancionesServidor.add(file);
+			
+			e.printStackTrace();
 		}
+		
 
 	}
 
@@ -134,7 +143,7 @@ public class AtenderPeticion implements Runnable
 		}
 	}
 
-	public void subirCancion() throws NumberFormatException, IOException
+	public void subirCancion()
 	//El usuario sube una cancion que se almacena junto al resto 
 	{
 		FileOutputStream f = null;

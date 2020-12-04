@@ -7,7 +7,9 @@ import cliente.Cliente;
 import interfazGrafica.Interfaz_Grafica;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
 
-public class Principal {
+public class Principal 
+{
+	
 
 	public static void main(String[] args) throws UnknownHostException, IOException, BasicPlayerException {
 		
@@ -16,4 +18,4 @@ public class Principal {
 		grafica.mostrarInterfaz();
 	}
 
-}//
+}

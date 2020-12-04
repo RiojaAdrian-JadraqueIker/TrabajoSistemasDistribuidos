@@ -1,15 +1,7 @@
 package reproductor;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.Thread.State;
-import java.util.LinkedList;
-import java.util.List;
-
 
 import javazoom.jlgui.basicplayer.BasicPlayer;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
@@ -23,6 +15,8 @@ public class Reproductor
 	
 	
 	//METODOS:
+	
+	
 	public Reproductor() 
 	{
 		this.reproductor = new BasicPlayer();
@@ -45,7 +39,7 @@ public class Reproductor
 		}
 	}
 	
-	public void play()  //o hacer try catch
+	public void play()
 	{
 		try {
 			this.reproductor.play();
@@ -69,28 +63,39 @@ public class Reproductor
 		return true;//devuelve true cuando termina;*/
 		
 	}
+	
 	public void pause() 
 	{
-		try {
+		try 
+		{
 			this.reproductor.pause();
-		} catch (BasicPlayerException e) {
+		} 
+		catch (BasicPlayerException e) 
+		{
 			e.printStackTrace();
 		}
 	}
+	
 	public void continuar()  
 	{
-		try {
+		try 
+		{
 			this.reproductor.resume();
-		} catch (BasicPlayerException e) {
+		} 
+		catch (BasicPlayerException e) 
+		{
 			e.printStackTrace();
 		}
 	}
 	
 	public void regularVolumen(double n) 
 	{
-		try {
+		try 
+		{
 			this.reproductor.setGain(n);
-		} catch (BasicPlayerException e) {
+		} 
+		catch (BasicPlayerException e) 
+		{
 			e.printStackTrace();
 		}
 	}
