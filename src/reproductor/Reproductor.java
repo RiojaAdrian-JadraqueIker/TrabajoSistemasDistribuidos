@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.Thread.State;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,6 +41,22 @@ public class Reproductor
 	public void play() throws BasicPlayerException //o hacer try catch
 	{
 		this.reproductor.play();
+		
+		/*this.reproductor.play();
+		Thread tarray[] = new Thread[Thread.activeCount()-1];
+		int anterior = Thread.activeCount();
+		Thread.enumerate(tarray);
+		
+		Thread hilo = tarray[3];
+		String s= hilo.getState().toString();
+		while(!s.equals("TERMINATED"))//ESPERA A QUE TERMINE
+		{
+			s =tarray[3].getState().toString();
+		}
+		
+		System.out.println("---------------");
+		return true;//devuelve true cuando termina;*/
+		
 	}
 	public void pause() throws BasicPlayerException //o hacer try catch
 	{
