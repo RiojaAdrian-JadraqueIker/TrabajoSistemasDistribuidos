@@ -89,9 +89,10 @@ public class Interfaz_Grafica extends JFrame {
 		contentPane.add(pbDuracionCancion);
 		
 		tbNombreCancionActual = new JTextField();
-		tbNombreCancionActual.setToolTipText("Nombre de la cancion actual");
 		tbNombreCancionActual.setEditable(false);
-		tbNombreCancionActual.setBounds(324, 272, 210, 20);
+		tbNombreCancionActual.setHorizontalAlignment(SwingConstants.CENTER);
+		tbNombreCancionActual.setToolTipText("Nombre de la cancion actual");
+		tbNombreCancionActual.setBounds(279, 272, 308, 20);
 		contentPane.add(tbNombreCancionActual);
 		tbNombreCancionActual.setColumns(10);
 		
@@ -127,11 +128,6 @@ public class Interfaz_Grafica extends JFrame {
 		volumen.setBounds(639, 46, 65, 195);
 		contentPane.add(volumen);
 		
-		JTextPane tpanelGrande = new JTextPane();
-		tpanelGrande.setEditable(false);
-		tpanelGrande.setBounds(279, 11, 308, 49);
-		contentPane.add(tpanelGrande);
-		
 		JButton btAnterior = new JButton("Anterior");
 		btAnterior.setToolTipText("Se pasa a la cancion anterior");
 		btAnterior.setBounds(208, 303, 89, 23);
@@ -143,7 +139,7 @@ public class Interfaz_Grafica extends JFrame {
 		contentPane.add(btSiguiente);
 		
 		java.awt.List lista = new java.awt.List();
-		lista.setBounds(279, 87, 308, 154);
+		lista.setBounds(279, 11, 308, 230);
 		contentPane.add(lista);
 		
 		
@@ -249,6 +245,7 @@ public class Interfaz_Grafica extends JFrame {
 			String s =lista.getSelectedItem();
 			cliente.pausarCancion();
 			cliente.descargarCancion(s);
+			mostrarNombreCancionActualSonando(s);
 			cliente.reproducirCancion();
 		}
 		
@@ -269,6 +266,7 @@ public class Interfaz_Grafica extends JFrame {
 			String s =lista.getSelectedItem();
 			cliente.pausarCancion();
 			cliente.descargarCancion(s);
+			mostrarNombreCancionActualSonando(s);
 			cliente.reproducirCancion();
 		}
 	}
@@ -328,10 +326,16 @@ public class Interfaz_Grafica extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				String s =lista.getSelectedItem();
 				cliente.descargarCancion(s);
+				mostrarNombreCancionActualSonando(s);
 				cliente.reproducirCancion();
 			}
 		});
 
+	}
+	
+	public void mostrarNombreCancionActualSonando(String t)
+	{
+		this.tbNombreCancionActual.setText(t);
 	}
 	
 	
