@@ -38,6 +38,8 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.awt.event.ActionEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class Interfaz_Grafica extends JFrame {
 
@@ -50,6 +52,12 @@ public class Interfaz_Grafica extends JFrame {
 	
 	public Interfaz_Grafica(Cliente c) throws UnknownHostException, IOException 
 	{
+		File f = new File("cancion.mp3");
+		if(f.exists())
+		{
+			f.delete();
+		}
+		
 		setTitle("Reproductor musica");
 		this.cliente=c;
 		this.cliente.conectar();
@@ -63,14 +71,12 @@ public class Interfaz_Grafica extends JFrame {
 		contentPane.setLayout(null);
 		
 		JButton btPLay = new JButton("Play");
-		btPLay.setEnabled(false);
 		btPLay.setToolTipText("Hace sonar la cancion actual");
 		btPLay.setBounds(307, 303, 89, 23);
 		contentPane.add(btPLay);
 		
 		
 		JButton btPause = new JButton("Pausa");
-		btPause.setEnabled(false);
 		btPause.setToolTipText("Hace parar la cancion que esta sonando");
 		btPause.setBounds(406, 303, 89, 23);
 		contentPane.add(btPause);
@@ -122,13 +128,11 @@ public class Interfaz_Grafica extends JFrame {
 		contentPane.add(tpanelGrande);
 		
 		JButton btAnterior = new JButton("Anterior");
-		btAnterior.setEnabled(false);
 		btAnterior.setToolTipText("Se pasa a la cancion anterior");
 		btAnterior.setBounds(208, 303, 89, 23);
 		contentPane.add(btAnterior);
 		
 		JButton btSiguiente = new JButton("Siguiente");
-		btSiguiente.setEnabled(false);
 		btSiguiente.setToolTipText("Pasa a la siguiente cancion");
 		btSiguiente.setBounds(505, 303, 89, 23);
 		contentPane.add(btSiguiente);
@@ -183,9 +187,79 @@ public class Interfaz_Grafica extends JFrame {
 			}
 		});
 		
+		btSiguiente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				siguienteCancion(lista);
+			}
+		});
+		
+		btAnterior.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) 
+			{
+				anteriorCancion(lista);
+			}
+		});
+		
+		volumen.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) 
+			{
+				volumen(volumen);
+			}
+		});
 		
 		//--------------
 		
+	}
+	
+	
+	public void volumen(JSlider volumen)
+	{
+		File f = new File("cancion.mp3");
+		
+		if(f.exists()) 
+		{
+			int valorActual = volumen.getValue();
+		}
+	}
+	
+	public void siguienteCancion(java.awt.List lista)
+	{
+		if(lista.getItemCount()!=0)
+		{
+			if(lista.getSelectedIndex()<lista.getItemCount()-1)
+			{
+				lista.select(lista.getSelectedIndex()+1);
+			}
+			else
+			{
+				lista.select(0);
+			}
+			String s =lista.getSelectedItem();
+			cliente.pausarCancion();
+			cliente.descargarCancion(s);
+			cliente.reproducirCancion();
+		}
+		
+	}
+	
+	public void anteriorCancion(java.awt.List lista)
+	{
+		if(lista.getItemCount()!=0)
+		{
+			if(lista.getSelectedIndex()>0)
+			{
+				lista.select(lista.getSelectedIndex()-1);
+			}
+			else
+			{
+				lista.select(lista.getItemCount()-1);
+			}
+			String s =lista.getSelectedItem();
+			cliente.pausarCancion();
+			cliente.descargarCancion(s);
+			cliente.reproducirCancion();
+		}
 	}
 	
 	public void mostrarInterfaz() 
@@ -212,12 +286,22 @@ public class Interfaz_Grafica extends JFrame {
 	
 	private void clickPlay()
 	{
-		this.cliente.reproducirCancion();
+		File f = new File("cancion.mp3");
+		
+		if(f.exists()) 
+		{
+			this.cliente.reanudarCancion();
+		}
+		
 	}
+	
+	
 	private void clickPause()
 	{
 		this.cliente.pausarCancion();
 	}
+	
+	
 	private void clickMostrarCanciones(java.awt.List lista ) throws NumberFormatException, IOException
 	{
 		List<String> listaCanciones = this.cliente.listaCanciones();
@@ -227,6 +311,15 @@ public class Interfaz_Grafica extends JFrame {
 		{
 			lista.add(s);
 		}
+		lista.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String s =lista.getSelectedItem();
+				cliente.descargarCancion(s);
+				cliente.reproducirCancion();
+			}
+		});
 
 	}
 	

@@ -190,6 +190,8 @@ public class Cliente
 		try(	Scanner entrda = new Scanner(System.in);
 				FileOutputStream f = new FileOutputStream(cancion, false) )
 		{
+			this.mensajesSalida.println(1);
+			this.mensajesSalida.flush();
 			
 			//Le decimos la cancion que queremos:
 			this.mensajesSalida.println(s);
@@ -209,6 +211,7 @@ public class Cliente
 				leidos = mensajesEntrada.read(buff);
 				suma += leidos;
 			}
+			System.out.println();
 			
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
