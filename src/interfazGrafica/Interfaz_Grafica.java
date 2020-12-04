@@ -3,6 +3,7 @@ package interfazGrafica;
 
 
 import javax.swing.JFrame;
+
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -16,8 +17,11 @@ import javax.swing.JFileChooser;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import java.awt.Font;
+import java.awt.GridLayout;
+
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
@@ -25,8 +29,6 @@ import javax.swing.SwingConstants;
 
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Random;
 import java.awt.event.ActionEvent;
@@ -52,7 +54,7 @@ public class Interfaz_Grafica extends JFrame {
 		
 		setTitle("Reproductor musica");
 		this.cliente=c;
-		this.cliente.conectar();
+		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 762, 407);
@@ -134,6 +136,8 @@ public class Interfaz_Grafica extends JFrame {
 		java.awt.List lista = new java.awt.List();
 		lista.setBounds(279, 11, 308, 230);
 		contentPane.add(lista);
+		
+		
 		
 		
 		//-----------------------------------
@@ -237,10 +241,21 @@ public class Interfaz_Grafica extends JFrame {
 		
 		//--------------//
 		
+		boolean b = this.cliente.conectar();
+		if(!b)
+		{
+			this.dispose();
+			JOptionPane.showInternalMessageDialog(null, "ERROR EL SERVIDOR NO ESTA ACTIVO");
+		}
+		else
+		{
+			this.mostrarInterfaz();
+		}
+		
 	}
 	
 	
-	public void volumen(JSlider volumen) 
+	private void volumen(JSlider volumen) 
 	{
 		File f = new File("cancion.mp3");
 		
@@ -251,7 +266,7 @@ public class Interfaz_Grafica extends JFrame {
 		}
 	}
 	
-	public void siguienteCancion(java.awt.List lista)
+	private void siguienteCancion(java.awt.List lista)
 	{
 		if(lista.getItemCount()!=0)
 		{
@@ -274,7 +289,7 @@ public class Interfaz_Grafica extends JFrame {
 		}	
 	}
 	
-	public void siguienteCancionAleatoria(java.awt.List lista)
+	private void siguienteCancionAleatoria(java.awt.List lista)
 	{
 		if(lista.getItemCount()!=0)
 		{
@@ -298,7 +313,7 @@ public class Interfaz_Grafica extends JFrame {
 		}	
 	}
 	
-	public void anteriorCancion(java.awt.List lista)
+	private void anteriorCancion(java.awt.List lista)
 	{
 		if(lista.getItemCount()!=0)
 		{
@@ -318,12 +333,12 @@ public class Interfaz_Grafica extends JFrame {
 		}
 	}
 	
-	public void mostrarInterfaz() 
+	private void mostrarInterfaz() 
 	{
 		this.setVisible(true);
 		
 	}
-	public File seleccionarArchivo()
+	private File seleccionarArchivo()
 	{
 		File fichero = null;
 		JFileChooser seleccionador = new JFileChooser();

@@ -15,7 +15,6 @@ public class Principal
 		
 		Cliente c =  new Cliente("localhost", 5555);
 		Interfaz_Grafica grafica = new Interfaz_Grafica(c);
-		grafica.mostrarInterfaz();
 	}
 
 }

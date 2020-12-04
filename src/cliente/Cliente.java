@@ -17,6 +17,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JFrame;
+
 import reproductor.Reproductor;
 
 
@@ -41,19 +43,23 @@ public class Cliente
 
 	}
 	
-	public void conectar()
+	public boolean conectar()
 	{
+		boolean b = false;
 		try 
 		{
 			this.cliente = new Socket(this.host, this.puerto);
 			this.mensajesEntrada = new DataInputStream(cliente.getInputStream());
-			BufferedReader bb = new BufferedReader(new InputStreamReader(this.mensajesEntrada));
 			this.mensajesSalida = new PrintStream(cliente.getOutputStream());
+			b= true;
 		} 
 		catch (IOException e) 
 		{
 			e.printStackTrace();
 		}
+
+		return b;
+		
 	}
 	
 	public void desconetar() 
