@@ -19,7 +19,7 @@ public class Reproductor
 {
 	//Atributos
 	private BasicPlayer reproductor;
-
+	
 	
 	//Metodos
 	
@@ -54,6 +54,7 @@ public class Reproductor
 	{
 		this.reproductor.setGain(n);
 	}
+	
 	
 
 	
