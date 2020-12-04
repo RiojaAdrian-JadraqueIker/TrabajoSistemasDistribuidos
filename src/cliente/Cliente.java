@@ -258,6 +258,11 @@ public class Cliente
 		}
 	}
 	
+	public void regularVolumen(double n) throws BasicPlayerException
+	{
+		this.reproductor.regularVolumen(n);
+	}
+	
 
 	/*public void elegirCancion() throws NumberFormatException, IOException, BasicPlayerException
 	//Yo creo que esto no lo tenemos que usar por que utiliza la consola 

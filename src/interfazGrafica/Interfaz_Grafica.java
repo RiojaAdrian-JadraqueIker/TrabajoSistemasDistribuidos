@@ -11,6 +11,8 @@ import javax.swing.event.ListDataListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import cliente.Cliente;
+import javazoom.jlgui.basicplayer.BasicPlayerException;
+
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 
@@ -117,6 +119,9 @@ public class Interfaz_Grafica extends JFrame {
 		contentPane.add(btAleatorio);
 		
 		JSlider volumen = new JSlider();
+		volumen.setPaintTicks(true);
+		volumen.setPaintLabels(true);
+		volumen.setSnapToTicks(true);
 		volumen.setOrientation(SwingConstants.VERTICAL);
 		volumen.setToolTipText("Sirve para regular el volumen");
 		volumen.setBounds(639, 46, 65, 195);
@@ -204,7 +209,12 @@ public class Interfaz_Grafica extends JFrame {
 		volumen.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) 
 			{
-				volumen(volumen);
+				try {
+					volumen(volumen);
+				} catch (BasicPlayerException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
 		
@@ -213,13 +223,14 @@ public class Interfaz_Grafica extends JFrame {
 	}
 	
 	
-	public void volumen(JSlider volumen)
+	public void volumen(JSlider volumen) throws BasicPlayerException
 	{
 		File f = new File("cancion.mp3");
 		
 		if(f.exists()) 
 		{
-			int valorActual = volumen.getValue();
+			double valorActual = volumen.getValue()/100.0;
+			this.cliente.regularVolumen(valorActual);
 		}
 	}
 	

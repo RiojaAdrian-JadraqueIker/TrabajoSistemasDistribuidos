@@ -37,7 +37,6 @@ public class Reproductor
 		this.reproductor.open(in);
 	}
 	
-	
 	public void play() throws BasicPlayerException //o hacer try catch
 	{
 		this.reproductor.play();
@@ -49,6 +48,11 @@ public class Reproductor
 	public void continuar() throws BasicPlayerException //o hacer try catch
 	{
 		this.reproductor.resume();
+	}
+	
+	public void regularVolumen(double n) throws BasicPlayerException
+	{
+		this.reproductor.setGain(n);
 	}
 	
 
