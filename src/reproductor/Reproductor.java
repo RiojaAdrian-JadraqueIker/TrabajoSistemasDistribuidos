@@ -40,7 +40,7 @@ public class Reproductor
 	
 	public void play() throws BasicPlayerException //o hacer try catch
 	{
-		this.reproductor.play();
+		this.reproductor.play(); 
 		
 		/*this.reproductor.play();
 		Thread tarray[] = new Thread[Thread.activeCount()-1];
