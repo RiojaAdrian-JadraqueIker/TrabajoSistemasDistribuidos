@@ -214,7 +214,7 @@ public class Interfaz_Grafica extends JFrame {
 			}
 		});
 		
-		//--------------
+		//--------------//
 		
 	}
 	

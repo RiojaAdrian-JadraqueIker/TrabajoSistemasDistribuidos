@@ -15,7 +15,7 @@ import javazoom.jlgui.basicplayer.BasicPlayer;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
 
 
-
+//
 public class Reproductor
 {
 	//Atributos
@@ -32,7 +32,7 @@ public class Reproductor
 	public void abrirCancion(File f) throws FileNotFoundException, BasicPlayerException 
 	{
 		this.reproductor.open(f);
-	}
+	} 
 	public void abrirCancion(InputStream in) throws FileNotFoundException, BasicPlayerException 
 	{
 		this.reproductor.open(in);
