@@ -44,11 +44,15 @@ public class Cliente
 
 	}
 	
-	public void conectar() throws UnknownHostException, IOException //falta cerrar las cosas
+	public void conectar()  //falta cerrar las cosas (metodoDesconectar())
 	{
-		Socket cliente = new Socket(this.host, this.puerto);
-		this.mensajesEntrada = new DataInputStream(cliente.getInputStream());
-		this.mensajesSalida = new PrintStream(cliente.getOutputStream());
+		try {
+			Socket cliente = new Socket(this.host, this.puerto);
+			this.mensajesEntrada = new DataInputStream(cliente.getInputStream());
+			this.mensajesSalida = new PrintStream(cliente.getOutputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -127,7 +131,7 @@ public class Cliente
 
 	
 	
-	public List<String> listaCanciones() throws NumberFormatException, IOException
+	public List<String> listaCanciones() 
 	//Devuelve una lista de canciones enviada por el servidor
 	{
 		List<String> lista = new ArrayList<String> ();
@@ -187,8 +191,7 @@ public class Cliente
 	{
 		File cancion = new File("cancion.mp3");
 		
-		try(	Scanner entrda = new Scanner(System.in);
-				FileOutputStream f = new FileOutputStream(cancion, false) )
+		try(FileOutputStream f = new FileOutputStream(cancion, false))
 		{
 			this.mensajesSalida.println(1);
 			this.mensajesSalida.flush();
@@ -223,46 +226,33 @@ public class Cliente
 	public void reproducirCancion() 
 	//Reproduce la cancion que tenemos disponible en el momento
 	{
-		try {
-			
-			this.reproductor.abrirCancion(new File("cancion.mp3"));
-			this.reproductor.play();
-			
-		} catch (BasicPlayerException e1) {
-			e1.printStackTrace();
-		}  catch (FileNotFoundException e2) {
-			e2.printStackTrace();
-		}
-		
+		this.reproductor.abrirCancion(new File("cancion.mp3"));
+		this.reproductor.play();	
 	}
 	
 	public void pausarCancion() 
 	//Pausa la cancion que esta sonando 
-	{
-		
-		try {
-			this.reproductor.pause();
-		} catch (BasicPlayerException e) {
-			e.printStackTrace();
-		}
-		
+	{	
+		this.reproductor.pause();
 	}
 	
 	public void reanudarCancion() 
 	//Continua reproduciendo una canción previamente pausada
 	{
-		try {
-			this.reproductor.continuar();
-		} catch (BasicPlayerException e) {
-			e.printStackTrace();
-		}
+		this.reproductor.continuar();
 	}
 	
-	public void regularVolumen(double n) throws BasicPlayerException
+	public void regularVolumen(double n) 
+	//Asigna a la cancion que se esta reproduciendo el volumen n
 	{
 		this.reproductor.regularVolumen(n);
 	}
 	
+	public double getVolumen() 
+	//Obtiene el valor del volumen de la canción que se está reproduciendo
+	{
+		return this.reproductor.getVolumen();
+	}
 
 	/*public void elegirCancion() throws NumberFormatException, IOException, BasicPlayerException
 	//Yo creo que esto no lo tenemos que usar por que utiliza la consola 

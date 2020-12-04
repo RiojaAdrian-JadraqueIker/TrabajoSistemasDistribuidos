@@ -39,9 +39,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.Random;
 import java.awt.event.ActionEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.ImageIcon;
 
 public class Interfaz_Grafica extends JFrame {
 
@@ -190,27 +192,40 @@ public class Interfaz_Grafica extends JFrame {
 		
 		btSiguiente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
-			{
-				siguienteCancion(lista);
+			{	
+				if(btAleatorio.isSelected()) {
+					//Reproducimos otra cancion aleatoria:
+					siguienteCancionAleatoria(lista);
+				} else {
+					//Reproducimos la siguiente cancion:
+					siguienteCancion(lista);
+				}
+				
+				//Asignamos a la nueva cancion el volumen que tenia la anterior:
+				volumen(volumen);
 			}
 		});
 		
 		btAnterior.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) 
 			{
-				anteriorCancion(lista);
+				if(btAleatorio.isSelected()) {
+					//Reproducimos otra cancion aleatoria:
+					siguienteCancionAleatoria(lista);
+				} else {
+					//Reproducimos la cancion anterior
+					anteriorCancion(lista);
+				}
+				
+				//Asignamos a la nueva cancion el volumen que tenia la anterior:
+				volumen(volumen);
 			}
 		});
 		
 		volumen.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) 
 			{
-				try {
-					volumen(volumen);
-				} catch (BasicPlayerException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+				volumen(volumen);
 			}
 		});
 		
@@ -219,7 +234,7 @@ public class Interfaz_Grafica extends JFrame {
 	}
 	
 	
-	public void volumen(JSlider volumen) throws BasicPlayerException
+	public void volumen(JSlider volumen) 
 	{
 		File f = new File("cancion.mp3");
 		
@@ -241,14 +256,40 @@ public class Interfaz_Grafica extends JFrame {
 			else
 			{
 				lista.select(0);
-			}
+			}			
+			
+			//Paramos la cancion actual y reproducimos la siguiente
 			String s =lista.getSelectedItem();
 			cliente.pausarCancion();
 			cliente.descargarCancion(s);
 			mostrarNombreCancionActualSonando(s);
 			cliente.reproducirCancion();
-		}
-		
+			
+		}	
+	}
+	
+	public void siguienteCancionAleatoria(java.awt.List lista)
+	{
+		if(lista.getItemCount()!=0)
+		{
+			Random r = new Random();
+			
+			int indiceAleatorio = lista.getSelectedIndex();
+			
+			while(indiceAleatorio == lista.getSelectedIndex()) {
+				indiceAleatorio = r.nextInt( lista.getItemCount());
+			}
+			
+			lista.select(indiceAleatorio);	
+			
+			//Paramos la cancion actual y reproducimos la siguiente
+			String s =lista.getSelectedItem();
+			cliente.pausarCancion();
+			cliente.descargarCancion(s);
+			mostrarNombreCancionActualSonando(s);
+			cliente.reproducirCancion();
+			
+		}	
 	}
 	
 	public void anteriorCancion(java.awt.List lista)
@@ -322,6 +363,7 @@ public class Interfaz_Grafica extends JFrame {
 		}
 		lista.addActionListener(new ActionListener() {
 			
+			//Cuando hacemos click en una cancion esta se descarga y se reproduce 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String s =lista.getSelectedItem();

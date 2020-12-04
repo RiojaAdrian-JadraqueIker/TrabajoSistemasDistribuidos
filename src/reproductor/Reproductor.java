@@ -15,32 +15,43 @@ import javazoom.jlgui.basicplayer.BasicPlayer;
 import javazoom.jlgui.basicplayer.BasicPlayerException;
 
 
-//
+
 public class Reproductor
 {
-	//Atributos
+	//ATRIBUTOS
 	private BasicPlayer reproductor;
 	
 	
-	//Metodos
-	
+	//METODOS:
 	public Reproductor() 
 	{
 		this.reproductor = new BasicPlayer();
 	}
 	
-	public void abrirCancion(File f) throws FileNotFoundException, BasicPlayerException 
+	public void abrirCancion(File f) 
 	{
-		this.reproductor.open(f);
+		try {
+			this.reproductor.open(f);
+		} catch (BasicPlayerException e) {
+			e.printStackTrace();
+		}
 	} 
-	public void abrirCancion(InputStream in) throws FileNotFoundException, BasicPlayerException 
+	public void abrirCancion(InputStream in)  
 	{
-		this.reproductor.open(in);
+		try {
+			this.reproductor.open(in);
+		} catch (BasicPlayerException e2) {
+			e2.printStackTrace();
+		}
 	}
 	
-	public void play() throws BasicPlayerException //o hacer try catch
+	public void play()  //o hacer try catch
 	{
-		this.reproductor.play(); 
+		try {
+			this.reproductor.play();
+		} catch (BasicPlayerException e) {
+			e.printStackTrace();
+		} 
 		
 		/*this.reproductor.play();
 		Thread tarray[] = new Thread[Thread.activeCount()-1];
@@ -58,18 +69,34 @@ public class Reproductor
 		return true;//devuelve true cuando termina;*/
 		
 	}
-	public void pause() throws BasicPlayerException //o hacer try catch
+	public void pause() 
 	{
-		this.reproductor.pause();
+		try {
+			this.reproductor.pause();
+		} catch (BasicPlayerException e) {
+			e.printStackTrace();
+		}
 	}
-	public void continuar() throws BasicPlayerException //o hacer try catch
+	public void continuar()  
 	{
-		this.reproductor.resume();
+		try {
+			this.reproductor.resume();
+		} catch (BasicPlayerException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public void regularVolumen(double n) throws BasicPlayerException
+	public void regularVolumen(double n) 
 	{
-		this.reproductor.setGain(n);
+		try {
+			this.reproductor.setGain(n);
+		} catch (BasicPlayerException e) {
+			e.printStackTrace();
+		}
+	}
+	public double getVolumen()
+	{
+		return this.reproductor.getGainValue();
 	}
 	
 	
