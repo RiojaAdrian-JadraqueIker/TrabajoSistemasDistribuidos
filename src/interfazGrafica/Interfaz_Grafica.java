@@ -34,6 +34,7 @@ import java.util.Random;
 import java.awt.event.ActionEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import java.awt.Color;
 
 public class Interfaz_Grafica extends JFrame {
 
@@ -57,7 +58,7 @@ public class Interfaz_Grafica extends JFrame {
 		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 762, 407);
+		setBounds(100, 100, 762, 382);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -74,11 +75,6 @@ public class Interfaz_Grafica extends JFrame {
 		btPause.setBounds(406, 303, 89, 23);
 		contentPane.add(btPause);
 		
-		JProgressBar pbDuracionCancion = new JProgressBar();
-		pbDuracionCancion.setToolTipText("Progreso de la cancion");
-		pbDuracionCancion.setBounds(208, 343, 386, 14);
-		contentPane.add(pbDuracionCancion);
-		
 		tbNombreCancionActual = new JTextField();
 		tbNombreCancionActual.setEditable(false);
 		tbNombreCancionActual.setHorizontalAlignment(SwingConstants.CENTER);
@@ -88,7 +84,7 @@ public class Interfaz_Grafica extends JFrame {
 		tbNombreCancionActual.setColumns(10);
 		
 		JPanel panelAcciones = new JPanel();
-		panelAcciones.setBounds(10, 11, 228, 281);
+		panelAcciones.setBounds(10, 56, 228, 158);
 		contentPane.add(panelAcciones);
 		panelAcciones.setLayout(null);
 		
@@ -106,6 +102,9 @@ public class Interfaz_Grafica extends JFrame {
 		panelAcciones.add(btSubirCancion);
 		
 		JButton btSalir = new JButton("Salir");
+		btSalir.setBackground(new Color(250, 128, 114));
+		btSalir.setFont(new Font("Tahoma", Font.BOLD, 14));
+		btSalir.setForeground(Color.WHITE);
 		btSalir.setBounds(38, 113, 156, 23);
 		panelAcciones.add(btSalir);
 		
@@ -120,7 +119,7 @@ public class Interfaz_Grafica extends JFrame {
 		volumen.setSnapToTicks(true);
 		volumen.setOrientation(SwingConstants.VERTICAL);
 		volumen.setToolTipText("Sirve para regular el volumen");
-		volumen.setBounds(639, 46, 65, 195);
+		volumen.setBounds(653, 46, 51, 195);
 		contentPane.add(volumen);
 		
 		JButton btAnterior = new JButton("Anterior");
@@ -136,6 +135,12 @@ public class Interfaz_Grafica extends JFrame {
 		java.awt.List lista = new java.awt.List();
 		lista.setBounds(279, 11, 308, 230);
 		contentPane.add(lista);
+		
+		JLabel lblNewLabel = new JLabel("Volumen");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblNewLabel.setBounds(638, 244, 78, 14);
+		contentPane.add(lblNewLabel);
 		
 		
 		
