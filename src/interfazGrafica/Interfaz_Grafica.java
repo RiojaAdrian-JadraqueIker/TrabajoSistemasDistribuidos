@@ -221,11 +221,16 @@ public class Interfaz_Grafica extends JFrame {
 							cliente.pausarCancion();
 							clickMostrarCanciones(lista, volumen);
 							cliente.reanudarCancion();
+							JOptionPane.showInternalMessageDialog(contentPane, "CANCION SUBIDA EXITOSAMENTE");
 						} catch (NumberFormatException e1) {
 
 							e1.printStackTrace();
 						}
 
+					}
+					else
+					{
+						JOptionPane.showInternalMessageDialog(contentPane, "NO SE HA SUBIDO NINGUNA CANCION");
 					}
 
 				}
