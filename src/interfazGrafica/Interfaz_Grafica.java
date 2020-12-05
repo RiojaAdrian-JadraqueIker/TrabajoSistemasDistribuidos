@@ -200,6 +200,7 @@ public class Interfaz_Grafica extends JFrame {
 				public void actionPerformed(ActionEvent e) 
 				{
 					try {
+						tbBuscarCancion.setText("");
 						clickMostrarCanciones(lista,volumen);
 					} catch (NumberFormatException e1) {
 
