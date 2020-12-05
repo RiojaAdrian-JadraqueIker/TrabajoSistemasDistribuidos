@@ -104,7 +104,15 @@ public class Reproductor
 		return this.reproductor.getGainValue();
 	}
 	
-	
+	public void finalizarCancion()
+	{
+		try {
+			this.reproductor.stop();
+		} catch (BasicPlayerException e) {
+		
+			e.printStackTrace();
+		}
+	}
 
 	
 	

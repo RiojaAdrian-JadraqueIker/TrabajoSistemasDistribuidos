@@ -94,7 +94,7 @@ public class Interfaz_Grafica extends JFrame {
 			tbNombreCancionActual.setColumns(10);
 
 			JPanel panelAcciones = new JPanel();
-			panelAcciones.setBounds(10, 56, 228, 175);
+			panelAcciones.setBounds(10, 56, 228, 220);
 			contentPane.add(panelAcciones);
 			panelAcciones.setLayout(null);
 
@@ -111,6 +111,14 @@ public class Interfaz_Grafica extends JFrame {
 			btSubirCancion.setBounds(38, 79, 156, 23);
 			panelAcciones.add(btSubirCancion);
 			
+
+			JButton btSalir = new JButton("Salir");
+			btSalir.setBackground(new Color(250, 128, 114));
+			btSalir.setFont(new Font("Tahoma", Font.BOLD, 14));
+			btSalir.setForeground(Color.WHITE);
+			btSalir.setBounds(38, 181, 156, 23);
+			panelAcciones.add(btSalir);
+			
 			JTextField tbBuscarCancion = new JTextField();
 			tbBuscarCancion.setBounds(38, 113, 156, 23);
 			panelAcciones.add(tbBuscarCancion);
@@ -118,13 +126,6 @@ public class Interfaz_Grafica extends JFrame {
 			JButton btBuscarCancion = new JButton("Buscar cancion");
 			btBuscarCancion.setBounds(38, 147, 156, 23);
 			panelAcciones.add(btBuscarCancion);
-
-			JButton btSalir = new JButton("Salir");
-			btSalir.setBackground(new Color(250, 128, 114));
-			btSalir.setFont(new Font("Tahoma", Font.BOLD, 14));
-			btSalir.setForeground(Color.WHITE);
-			btSalir.setBounds(38, 113, 156, 23);
-			panelAcciones.add(btSalir);
 
 			JRadioButton btAleatorio = new JRadioButton("Aleatorio");
 			btAleatorio.setToolTipText("Se reproduce de forma aleatoria");
@@ -177,6 +178,7 @@ public class Interfaz_Grafica extends JFrame {
 				public void actionPerformed(ActionEvent e) 
 				{
 					cliente.desconetar();
+					cliente.stopCancion();
 					dispose();
 				}
 			});

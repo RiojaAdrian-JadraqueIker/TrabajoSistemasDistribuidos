@@ -213,6 +213,10 @@ public class Cliente
 	{	
 		this.reproductor.pause();
 	}
+	public void stopCancion()
+	{
+		this.reproductor.finalizarCancion();
+	}
 	
 	public void reanudarCancion() 
 	//Continua reproduciendo una canción previamente pausada
