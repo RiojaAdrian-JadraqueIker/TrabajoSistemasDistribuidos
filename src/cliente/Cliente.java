@@ -68,6 +68,38 @@ public class Cliente
 		this.mensajesSalida.flush();
 	}
 	
+	public List<String> listaCanciones(String busqueda) {
+		List<String> lista = new ArrayList<String> ();
+		
+		try {
+			//es el caso 4 del servidor luego mandamos la opcion 4
+			this.mensajesSalida.println(4);
+			this.mensajesSalida.flush();
+			
+			this.mensajesSalida.println(busqueda);
+			this.mensajesSalida.flush();
+			
+			
+			int tam = Integer.parseInt(mensajesEntrada.readLine());
+			
+			for(int i =0; i<tam;i++)
+			{
+				String s = mensajesEntrada.readLine();
+				lista.add(s);
+			} 	
+			
+		} 
+		catch (NumberFormatException e1) 
+		{
+			e1.printStackTrace();
+		} 
+		catch (IOException e2) 
+		{
+			e2.printStackTrace();
+		} 
+		
+		return lista;	
+	}
 
 	public List<String> listaCanciones() 
 	//Devuelve una lista de canciones enviada por el servidor

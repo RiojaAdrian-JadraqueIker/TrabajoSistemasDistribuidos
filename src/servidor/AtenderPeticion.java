@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 //
@@ -80,6 +82,10 @@ public class AtenderPeticion implements Runnable
 						seguir = false;
 						break;
 					}
+					
+					case 4: //El cliente hace una busqueda y solicita las canciones que coincidan con la busqueda
+						this.listarCanciones(this.mensajesEntrada.readLine());
+						break;
 				}
 			}
 
@@ -90,6 +96,25 @@ public class AtenderPeticion implements Runnable
 			e.printStackTrace();
 		}
 
+	}
+	public void listarCanciones(String s) 
+	//Lista todas las canciones que contienen el string s en su nombre:
+	{
+		List<String> listaCanciones = new ArrayList<String> ();
+		
+		for (File f : cancionesServidor) {
+			if (f.getName().contains(s)) {
+				listaCanciones.add(f.getName());
+			}
+		}
+		
+		this.mensajesSalida.println( listaCanciones.size());
+		this.mensajesSalida.flush();
+		
+		for(String nombre : listaCanciones) {
+			this.mensajesSalida.println(nombre);
+			this.mensajesSalida.flush();
+		}
 	}
 
 	public void listarCanciones()
