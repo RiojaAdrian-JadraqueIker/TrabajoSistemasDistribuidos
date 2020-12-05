@@ -102,7 +102,7 @@ public class AtenderPeticion implements Runnable
 	{
 		List<String> listaCanciones = new ArrayList<String> ();
 		
-		for (File f : cancionesServidor) {
+		for (File f : this.cancionesServidor) {
 			if (f.getName().contains(s)) {
 				listaCanciones.add(f.getName());
 			}

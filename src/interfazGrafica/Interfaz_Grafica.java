@@ -47,6 +47,7 @@ public class Interfaz_Grafica extends JFrame {
 
 	public Interfaz_Grafica(Cliente c)
 	{
+		setResizable(false);
 
 
 		File f = new File("cancion.mp3");
@@ -93,7 +94,7 @@ public class Interfaz_Grafica extends JFrame {
 			tbNombreCancionActual.setColumns(10);
 
 			JPanel panelAcciones = new JPanel();
-			panelAcciones.setBounds(10, 56, 228, 158);
+			panelAcciones.setBounds(10, 56, 228, 175);
 			contentPane.add(panelAcciones);
 			panelAcciones.setLayout(null);
 
@@ -109,6 +110,14 @@ public class Interfaz_Grafica extends JFrame {
 			JButton btSubirCancion = new JButton("Subir cancion");
 			btSubirCancion.setBounds(38, 79, 156, 23);
 			panelAcciones.add(btSubirCancion);
+			
+			JTextField tbBuscarCancion = new JTextField();
+			tbBuscarCancion.setBounds(38, 113, 156, 23);
+			panelAcciones.add(tbBuscarCancion);
+			
+			JButton btBuscarCancion = new JButton("Buscar cancion");
+			btBuscarCancion.setBounds(38, 147, 156, 23);
+			panelAcciones.add(btBuscarCancion);
 
 			JButton btSalir = new JButton("Salir");
 			btSalir.setBackground(new Color(250, 128, 114));
@@ -157,6 +166,13 @@ public class Interfaz_Grafica extends JFrame {
 			//-----------------------------------
 			//---------------EVENTOS-------------	
 
+			btBuscarCancion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) 
+				{
+					buscarCancion(tbBuscarCancion, lista);
+				}
+			});
+			
 			btSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) 
 				{
@@ -265,6 +281,16 @@ public class Interfaz_Grafica extends JFrame {
 	}
 
 
+	private void buscarCancion(JTextField textbox, java.awt.List lista)
+	{
+		lista.clear();
+		List<String> l = this.cliente.listaCanciones(textbox.getText());
+		for(String s: l)
+		{
+			lista.add(s);
+		}
+	}
+	
 	private void volumen(JSlider volumen) 
 	{
 		File f = new File("cancion.mp3");
