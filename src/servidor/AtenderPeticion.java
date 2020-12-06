@@ -84,8 +84,17 @@ public class AtenderPeticion implements Runnable
 					}
 					
 					case 4: //El cliente hace una busqueda y solicita las canciones que coincidan con la busqueda
+					{
 						this.listarCanciones(this.mensajesEntrada.readLine());
 						break;
+					}
+					
+					case 5: //El ciente solicita comprobar si la cancion existe en el servidor
+					{
+						this.comprobarSiExiste();
+						break;
+					}
+						
 				}
 			}
 
@@ -97,30 +106,106 @@ public class AtenderPeticion implements Runnable
 		}
 
 	}
+	public void comprobarSiExiste() 
+	//Comprobamos si la cancion que nos envia el usuario ya existe
+	{
+		int bytesIguales = 0;
+		FileInputStream streamCancionYaExistente = null;
+		
+		try {
+			String nombre = this.mensajesEntrada.readLine();
+			long tamFich = Long.parseLong(mensajesEntrada.readLine());
+			
+			File cancion = new File("cancionesPredefinidas/"+nombre);
+			
+			
+			//Comprobamos si ya existe una cancion con el mismo nombre,
+			//de ser asi, comprobamos la similitud que tiene con la cancion que
+			//el cliente nos quiere enviar:
+			//(Si son casi la misma canción, no se podra subir la cancion)
+			System.out.println("PRUEBA: el metodo ya existe comienza su ejecucion ");
+			System.out.println("exists: "+cancion.exists());
+			System.out.println("lenght = tamaño del fichero existente "+(cancion.length()==tamFich));
+			System.out.println("nombre del fichero a subir: "+nombre);
+			System.out.println("Tamañs: "+cancion.length()+", " + tamFich);
+			
+			if(cancion.exists()) {
+				mensajesSalida.write(1); //La cancion existe
+				mensajesSalida.println(Math.min(tamFich, cancion.length()));
+				mensajesSalida.flush();
+				
+				System.out.println("PRUEBA: La cancion ya existe ");
+				streamCancionYaExistente = new FileInputStream(cancion);
+				
+				long cont = 0;
+				int byteLeido1 = mensajesEntrada.read();
+				int byteLeido2 = streamCancionYaExistente.read();
+				cont++;
+				while(cont < Math.min(tamFich, cancion.length())) { //Se supone que las dos inputStream acaban a la vez
+					
+					if(byteLeido1==byteLeido2) {
+						bytesIguales ++;
+					}
+					
+					byteLeido1 = mensajesEntrada.read();
+					byteLeido2 = streamCancionYaExistente.read();
+					cont++;
+				}
+				
+				if(((bytesIguales/tamFich)*1.0)>=80) {
+					mensajesSalida.write(1);
+					mensajesSalida.flush();//La cancion ya existe
+				}
+				else  {
+					mensajesSalida.write(0); 
+					mensajesSalida.flush();//La cancion no existe
+				}
+			} 
+			else {
+				mensajesSalida.write(0);
+				mensajesSalida.flush();//La cancion no existe
+			}
+			
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		} finally {
+			if(streamCancionYaExistente != null) {
+				try {
+					streamCancionYaExistente.close();
+				} catch (IOException e2) {
+					e2.printStackTrace();
+				}
+			}
+		}
+	}
+	
+	
 	public void listarCanciones(String s) 
 	//Lista todas las canciones que contienen el string s en su nombre:
 	{
-		List<String> listaCanciones = new ArrayList<String> ();
-		
-		for (File f : this.cancionesServidor) {
-			if (f.getName().contains(s)) {
-				listaCanciones.add(f.getName());
+			this.actualizarListaCanciones();
+			
+			List<String> listaCanciones = new ArrayList<String> ();
+			
+			for (File f : this.cancionesServidor) {
+				if (f.getName().contains(s)) {
+					listaCanciones.add(f.getName());
+				}
 			}
-		}
-		
-		this.mensajesSalida.println( listaCanciones.size());
-		this.mensajesSalida.flush();
-		
-		for(String nombre : listaCanciones) {
-			this.mensajesSalida.println(nombre);
+			
+			this.mensajesSalida.println( listaCanciones.size());
 			this.mensajesSalida.flush();
-		}
+			
+			for(String nombre : listaCanciones) {
+				this.mensajesSalida.println(nombre);
+				this.mensajesSalida.flush();
+			}
 	}
 
 	public void listarCanciones()
 	//Envia por el canal de comunicacion los nombres de las canciones que hay disponibles
 	{
-
+		this.actualizarListaCanciones();
 		this.mensajesSalida.println(cancionesServidor.size());
 		this.mensajesSalida.flush();
 
@@ -173,15 +258,29 @@ public class AtenderPeticion implements Runnable
 	{
 		FileOutputStream f = null;
 		
+		
 		try {
+			
 			String nombre = this.mensajesEntrada.readLine();
 			long tamFich = Long.parseLong(mensajesEntrada.readLine());
 			
-			File cancion = new File("cancionesPredefinidas/"+nombre);
+			File cancion = new File("cancionesPredefinidas/"+nombre+".mp3");
+			String nombreFinal = nombre;
+							
+			if(cancion.exists()) 
+			//Si ya existe una cancion con ese nombre la guardamos con otro nombre
+			{
+				int cont=1;
+				while(cancion.exists()) {
+					nombreFinal = nombre+"("+cont+")";
+					cancion.renameTo(new File("cancionesPredefinidas/"+nombreFinal+".mp3"));
+					cont++;
+				}
+			}
+					
+			//Recibimos la cancion para almacenarla :
 			f = new FileOutputStream(cancion, false);
-			
-			
-			
+				
 			byte buff[] = new byte[300000];
 			int leidos = mensajesEntrada.read(buff);
 			long suma =0;
@@ -192,11 +291,11 @@ public class AtenderPeticion implements Runnable
 				f.flush();
 				leidos = mensajesEntrada.read(buff);
 				suma += leidos;
-			}
-			
+			}																
+								
 			//Actualizamos la lista de canciones disponibles en el servidor:
-			this.cancionesServidor.add(new File(nombre));
-		
+			this.actualizarListaCanciones();
+																		
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		} finally {
@@ -209,6 +308,18 @@ public class AtenderPeticion implements Runnable
 			}
 		}
 		
+	}
+	
+	private void actualizarListaCanciones() 
+	//Actualiza la lista de canciones del servidor 
+	{
+		this.cancionesServidor.clear(); 
+		File cancionesPredefinidas = new File("cancionesPredefinidas");
+		File lista [] = cancionesPredefinidas.listFiles();
+		for (File file : lista) 
+		{
+			this.cancionesServidor.add(file);
+		}
 	}
 
 

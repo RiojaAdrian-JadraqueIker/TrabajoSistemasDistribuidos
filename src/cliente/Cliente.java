@@ -131,6 +131,49 @@ public class Cliente
 		
 		return lista;	
 	}
+	public boolean yaExiste(File f) {
+		try(FileInputStream fichero = new FileInputStream(f);)
+		{
+			
+			this.mensajesSalida.println(5);
+			this.mensajesSalida.println(f.getName());
+			this.mensajesSalida.println(f.length());
+			this.mensajesSalida.flush();
+			
+			if(mensajesEntrada.read()==1) {
+				long tamañoAComparar = Long.parseLong( this.mensajesEntrada.readLine() );
+				long cont = 0;
+				int byteLeido = fichero.read();
+				cont++;
+				while(cont < tamañoAComparar) {
+					
+					mensajesSalida.write(byteLeido);
+					mensajesSalida.flush();
+					byteLeido = fichero.read();
+					cont++;
+				}
+				
+				
+				if (mensajesEntrada.read()==0) {
+					return false;
+				} else return true;
+			}
+			else {
+				return false;	
+			}
+			
+			
+		} 
+		catch (FileNotFoundException e1 )
+		{
+			e1.printStackTrace();
+		} 
+		catch (IOException e2) 
+		{
+			e2.printStackTrace();
+		}
+		return true;
+	}
 	
 	public void subirCancion(File f) 
 	//Envia al servidor el fichero y este lo almacena en su "BD"
@@ -138,8 +181,11 @@ public class Cliente
 		try(FileInputStream fichero = new FileInputStream(f);)
 		{
 			
+			String nombreSinExtension = f.getName().substring(0, f.getName().length()-4);
+			System.out.println(nombreSinExtension);
+			
 			this.mensajesSalida.println(2);
-			this.mensajesSalida.println(f.getName());
+			this.mensajesSalida.println(nombreSinExtension);
 			this.mensajesSalida.println(f.length());
 			this.mensajesSalida.flush();
 

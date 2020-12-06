@@ -218,21 +218,30 @@ public class Interfaz_Grafica extends JFrame {
 					File fichero = seleccionarArchivo();
 					if(fichero!=null)
 					{
-						cliente.subirCancion(fichero);
-						try {
-							cliente.pausarCancion();
-							clickMostrarCanciones(lista, volumen);
-							cliente.reanudarCancion();
-							JOptionPane.showInternalMessageDialog(contentPane, "CANCION SUBIDA EXITOSAMENTE");
-						} catch (NumberFormatException e1) {
-
-							e1.printStackTrace();
+						
+						System.out.println("preparando para comprobar si existe la cancion");
+						if (cliente.yaExiste(fichero)) {
+							JOptionPane.showInternalMessageDialog(contentPane, "LA CANCION YA EXISTE EN EL SERVIDOR");
 						}
-
+						else {
+							System.out.println("preparando para subir cancion");
+							cliente.subirCancion(fichero);
+							System.out.println("cancion subida");
+							try {
+								/*cliente.pausarCancion();
+								clickMostrarCanciones(lista, volumen);
+								cliente.reanudarCancion(); */
+								JOptionPane.showInternalMessageDialog(contentPane, "CANCION SUBIDA EXITOSAMENTE");
+							} catch (NumberFormatException e1) {
+	
+								e1.printStackTrace();
+							}
+						}
+						
 					}
 					else
 					{
-						JOptionPane.showInternalMessageDialog(contentPane, "NO SE HA SUBIDO NINGUNA CANCION");
+						JOptionPane.showInternalMessageDialog(contentPane, "NO SE HA SELECCIONADO NINGUNA CANCION");
 					}
 
 				}
