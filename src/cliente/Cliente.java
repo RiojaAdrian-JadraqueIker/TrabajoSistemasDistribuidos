@@ -187,17 +187,17 @@ public class Cliente
 		return true;
 	}
 	
-	public void subirCancion(File f) 
+	public void subirCancion(File f,String nombre) 
 	//Envia al servidor el fichero y este lo almacena en su "BD"
 	{
 		try(FileInputStream fichero = new FileInputStream(f);)
 		{
 			
-			String nombreSinExtension = f.getName().substring(0, f.getName().length()-4);
-			System.out.println(nombreSinExtension);
+			//String nombreSinExtension = f.getName().substring(0, f.getName().length()-4);
+			//System.out.println(nombreSinExtension);
 			
 			this.mensajesSalida.println(2);
-			this.mensajesSalida.println(nombreSinExtension);
+			this.mensajesSalida.println(nombre);
 			this.mensajesSalida.println(f.length());
 			this.mensajesSalida.flush();
 

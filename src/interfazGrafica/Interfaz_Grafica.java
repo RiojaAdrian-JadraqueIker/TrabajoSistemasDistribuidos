@@ -225,9 +225,20 @@ public class Interfaz_Grafica extends JFrame {
 						}
 						else 
 						{
-							System.out.println("preparando para subir cancion");
-							cliente.subirCancion(fichero);
-							System.out.println("cancion subida");
+							//System.out.println("preparando para subir cancion");
+							//AQUI PONER------------------------------------------------
+							String autor = JOptionPane.showInputDialog(contentPane, "Autor:");
+							while(autor==null || autor.isBlank())
+							{
+								autor = JOptionPane.showInputDialog(contentPane, "Autor:");
+							}
+							String tituloCancion = JOptionPane.showInputDialog(contentPane, "Titulo de la cancion:");
+							while(tituloCancion==null || tituloCancion.isBlank())
+							{
+								tituloCancion = JOptionPane.showInputDialog(contentPane, "Titulo de la cancion:");
+							}
+							cliente.subirCancion(fichero,autor+" - "+tituloCancion);
+							//System.out.println("cancion subida");
 
 							JOptionPane.showInternalMessageDialog(contentPane, "CANCION SUBIDA EXITOSAMENTE");
 
