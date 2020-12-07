@@ -63,7 +63,7 @@ public class Interfaz_Grafica extends JFrame {
 		if(!b)//caso servidor no este activo
 		{
 			this.dispose();
-			JOptionPane.showInternalMessageDialog(null, "ERROR EL SERVIDOR NO ESTA ACTIVO");
+			JOptionPane.showInternalMessageDialog(null, "ERROR DE CONEXION CON EL SERVIDOR");
 		}
 		else
 		{
