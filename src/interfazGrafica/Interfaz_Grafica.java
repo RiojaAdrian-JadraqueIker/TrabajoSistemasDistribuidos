@@ -223,19 +223,14 @@ public class Interfaz_Grafica extends JFrame {
 						if (cliente.yaExiste(fichero)) {
 							JOptionPane.showInternalMessageDialog(contentPane, "LA CANCION YA EXISTE EN EL SERVIDOR");
 						}
-						else {
+						else 
+						{
 							System.out.println("preparando para subir cancion");
 							cliente.subirCancion(fichero);
 							System.out.println("cancion subida");
-							try {
-								/*cliente.pausarCancion();
-								clickMostrarCanciones(lista, volumen);
-								cliente.reanudarCancion(); */
-								JOptionPane.showInternalMessageDialog(contentPane, "CANCION SUBIDA EXITOSAMENTE");
-							} catch (NumberFormatException e1) {
-	
-								e1.printStackTrace();
-							}
+
+							JOptionPane.showInternalMessageDialog(contentPane, "CANCION SUBIDA EXITOSAMENTE");
+
 						}
 						
 					}

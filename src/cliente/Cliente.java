@@ -138,19 +138,31 @@ public class Cliente
 			this.mensajesSalida.println(5);
 			this.mensajesSalida.println(f.getName());
 			this.mensajesSalida.println(f.length());
-			this.mensajesSalida.flush();
+			this.mensajesSalida.flush(); //mandamos el nombre y el tamaño de lo que queremos subir
 			
 			if(mensajesEntrada.read()==1) {
-				long tamañoAComparar = Long.parseLong( this.mensajesEntrada.readLine() );
+				long tamañoAComparar = Long.parseLong( this.mensajesEntrada.readLine() ); //cogemos el amaño minimo de los dos
 				long cont = 0;
-				int byteLeido = fichero.read();
-				cont++;
-				while(cont < tamañoAComparar) {
-					
-					mensajesSalida.write(byteLeido);
+				//----------------------------------------------------------------
+				byte buff[] = new byte[65536];
+				int leidos = fichero.read(buff);
+				cont += leidos;
+				boolean iguales = true;
+				
+				while(leidos!= -1 && iguales && (cont <= tamañoAComparar)) 
+				{
+					mensajesSalida.write(buff,0,leidos);
 					mensajesSalida.flush();
-					byteLeido = fichero.read();
-					cont++;
+					
+					String s = this.mensajesEntrada.readLine(); //leemos si siguen siendo iguales o no
+					if(!s.equals("true"))
+					{
+						iguales= false;
+					}
+					
+					
+					leidos = fichero.read(buff);
+					cont += leidos;
 				}
 				
 				

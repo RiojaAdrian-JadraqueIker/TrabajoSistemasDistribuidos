@@ -114,7 +114,7 @@ public class AtenderPeticion implements Runnable
 		
 		try {
 			String nombre = this.mensajesEntrada.readLine();
-			long tamFich = Long.parseLong(mensajesEntrada.readLine());
+			long tamFich = Long.parseLong(mensajesEntrada.readLine()); //leemos el nombre de lo que nos quieren mandar y su tamaño
 			
 			File cancion = new File("cancionesPredefinidas/"+nombre);
 			
@@ -129,37 +129,76 @@ public class AtenderPeticion implements Runnable
 			System.out.println("nombre del fichero a subir: "+nombre);
 			System.out.println("Tamañs: "+cancion.length()+", " + tamFich);
 			
-			if(cancion.exists()) {
+			if(cancion.exists()) 
+			{
 				mensajesSalida.write(1); //La cancion existe
-				mensajesSalida.println(Math.min(tamFich, cancion.length()));
+				mensajesSalida.println(Math.min(tamFich, cancion.length())); //mandamos el tamaño minimo de los dos
 				mensajesSalida.flush();
 				
 				System.out.println("PRUEBA: La cancion ya existe ");
 				streamCancionYaExistente = new FileInputStream(cancion);
 				
 				long cont = 0;
-				int byteLeido1 = mensajesEntrada.read();
-				int byteLeido2 = streamCancionYaExistente.read();
-				cont++;
-				while(cont < Math.min(tamFich, cancion.length())) { //Se supone que las dos inputStream acaban a la vez
+				//---------------------------------------------------------------------------------------------
+				byte buffLlegada[] = new byte[700000];
+				int leidosLlegada = mensajesEntrada.read(buffLlegada);
+				
+				byte buffFichero[] = new byte[700000];
+				int leidosFichero = streamCancionYaExistente.read(buffFichero,0,leidosLlegada); //para que lean los mismos
+				
+				cont += leidosLlegada;
+				boolean iguales = true;
+				
+				while(leidosLlegada!=-1 && iguales && (cont < Math.min(tamFich, cancion.length()))) 
+				{ //Se supone que las dos inputStream acaban a la vez
 					
-					if(byteLeido1==byteLeido2) {
-						bytesIguales ++;
+					int byteComparado =0;
+					while(iguales && (byteComparado<leidosLlegada))
+					{
+						if(!(buffFichero[byteComparado]==buffLlegada[byteComparado]))
+						{
+							iguales = false;
+							this.mensajesSalida.println("false");
+							this.mensajesSalida.flush();
+							//break;
+						}
+						else
+						{
+							byteComparado++;
+						}
+					} 
+					if(iguales)
+					{
+						this.mensajesSalida.println("true");
+						this.mensajesSalida.flush(); 
+					}
+					else
+					{
+						break;
 					}
 					
-					byteLeido1 = mensajesEntrada.read();
-					byteLeido2 = streamCancionYaExistente.read();
-					cont++;
+
+					leidosLlegada = mensajesEntrada.read(buffLlegada);
+					leidosFichero = streamCancionYaExistente.read(buffFichero,0,leidosLlegada);
+					cont += leidosLlegada;
+				}
+				if(iguales)
+				{
+					this.mensajesSalida.println(iguales+""); //mandamos como ha quedado
 				}
 				
-				if(((bytesIguales/tamFich)*1.0)>=80) {
+				
+				if(iguales)
+				{
 					mensajesSalida.write(1);
 					mensajesSalida.flush();//La cancion ya existe
 				}
-				else  {
+				else
+				{
 					mensajesSalida.write(0); 
 					mensajesSalida.flush();//La cancion no existe
 				}
+				
 			} 
 			else {
 				mensajesSalida.write(0);
@@ -266,20 +305,25 @@ public class AtenderPeticion implements Runnable
 			
 			File cancion = new File("cancionesPredefinidas/"+nombre+".mp3");
 			String nombreFinal = nombre;
-							
+			
+			File cancionRename = new File("cancionesPredefinidas/"+nombre+".mp3");
 			if(cancion.exists()) 
 			//Si ya existe una cancion con ese nombre la guardamos con otro nombre
 			{
 				int cont=1;
-				while(cancion.exists()) {
-					nombreFinal = nombre+"("+cont+")";
-					cancion.renameTo(new File("cancionesPredefinidas/"+nombreFinal+".mp3"));
+				nombreFinal = nombre+"("+cont+")";
+				cancionRename = new File("cancionesPredefinidas/"+nombreFinal+".mp3");
+				while(cancionRename.exists()) 
+				{
 					cont++;
+					nombreFinal = nombre+"("+cont+")";
+					cancionRename = new File("cancionesPredefinidas/"+nombreFinal+".mp3");
 				}
+				cancionRename.renameTo(new File("cancionesPredefinidas/"+nombreFinal+".mp3"));
 			}
 					
 			//Recibimos la cancion para almacenarla :
-			f = new FileOutputStream(cancion, false);
+			f = new FileOutputStream(cancionRename, false);
 				
 			byte buff[] = new byte[300000];
 			int leidos = mensajesEntrada.read(buff);
