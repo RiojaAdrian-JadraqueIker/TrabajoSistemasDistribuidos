@@ -123,11 +123,6 @@ public class AtenderPeticion implements Runnable
 			//de ser asi, comprobamos la similitud que tiene con la cancion que
 			//el cliente nos quiere enviar:
 			//(Si son casi la misma canción, no se podra subir la cancion)
-			System.out.println("PRUEBA: el metodo ya existe comienza su ejecucion ");
-			System.out.println("exists: "+cancion.exists());
-			System.out.println("lenght = tamaño del fichero existente "+(cancion.length()==tamFich));
-			System.out.println("nombre del fichero a subir: "+nombre);
-			System.out.println("Tamañs: "+cancion.length()+", " + tamFich);
 			
 			if(cancion.exists()) 
 			{
@@ -135,7 +130,7 @@ public class AtenderPeticion implements Runnable
 				mensajesSalida.println(Math.min(tamFich, cancion.length())); //mandamos el tamaño minimo de los dos
 				mensajesSalida.flush();
 				
-				System.out.println("PRUEBA: La cancion ya existe ");
+				
 				streamCancionYaExistente = new FileInputStream(cancion);
 				
 				long cont = 0;

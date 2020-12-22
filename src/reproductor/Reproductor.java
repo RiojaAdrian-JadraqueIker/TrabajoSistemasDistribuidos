@@ -8,7 +8,7 @@ import javazoom.jlgui.basicplayer.BasicPlayerException;
 
 
 
-public class Reproductor
+public class Reproductor extends Thread
 {
 	//ATRIBUTOS
 	private BasicPlayer reproductor;
@@ -46,8 +46,8 @@ public class Reproductor
 		} catch (BasicPlayerException e) {
 			e.printStackTrace();
 		} 
-		
-		/*this.reproductor.play();
+		/*
+		this.reproductor.play();
 		Thread tarray[] = new Thread[Thread.activeCount()-1];
 		int anterior = Thread.activeCount();
 		Thread.enumerate(tarray);
@@ -59,8 +59,8 @@ public class Reproductor
 			s =tarray[3].getState().toString();
 		}
 		
-		System.out.println("---------------");
-		return true;//devuelve true cuando termina;*/
+		//System.out.println("---------------")
+		throws new Exception("cancionTerminada");//devuelve true cuando termina; */
 		
 	}
 	

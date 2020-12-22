@@ -262,8 +262,9 @@ public class Cliente
 	public void reproducirCancion() 
 	//Reproduce la cancion que tenemos disponible en el momento
 	{
+	
 		this.reproductor.abrirCancion(new File("cancion.mp3"));
-		this.reproductor.play();	
+		this.reproductor.play();
 	}
 	
 	public void pausarCancion() 

@@ -41,7 +41,7 @@ public class Interfaz_Grafica extends JFrame {
 	private JPanel contentPane;
 	private Cliente cliente;
 	private JTextField tbNombreCancionActual;
-
+	
 
 
 
@@ -49,7 +49,8 @@ public class Interfaz_Grafica extends JFrame {
 	{
 		setResizable(false);
 
-
+		
+		//F es el archivo donde se almacenara la cancion a reproducir:
 		File f = new File("cancion.mp3");
 		if(f.exists())
 		{
@@ -60,7 +61,7 @@ public class Interfaz_Grafica extends JFrame {
 		this.cliente=c;
 
 		boolean b = this.cliente.conectar();
-		if(!b)//caso servidor no este activo
+		if(!b) //caso en el que el servidor no este activo
 		{
 			this.dispose();
 			JOptionPane.showInternalMessageDialog(null, "ERROR DE CONEXION CON EL SERVIDOR");
@@ -166,7 +167,8 @@ public class Interfaz_Grafica extends JFrame {
 
 			//-----------------------------------
 			//---------------EVENTOS-------------	
-
+			//-----------------------------------
+			
 			btBuscarCancion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) 
 				{
@@ -201,13 +203,8 @@ public class Interfaz_Grafica extends JFrame {
 			btMostrarCanciones.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) 
 				{
-					try {
 						tbBuscarCancion.setText("");
-						clickMostrarCanciones(lista,volumen);
-					} catch (NumberFormatException e1) {
-
-						e1.printStackTrace();
-					}
+						clickMostrarCanciones(lista,volumen);					
 				}
 			});
 
@@ -216,40 +213,39 @@ public class Interfaz_Grafica extends JFrame {
 				public void actionPerformed(ActionEvent e) 
 				{
 					File fichero = seleccionarArchivo();
-					if(fichero!=null)
+					//Comprobamos que el cliente ha seleccionado un archivo valido (mp3)
+					if(fichero!=null && fichero.getName().endsWith("mp3"))
 					{
 						
-						System.out.println("preparando para comprobar si existe la cancion");
+						//Comprobamos si la canción existe:
 						if (cliente.yaExiste(fichero)) {
 							JOptionPane.showInternalMessageDialog(contentPane, "LA CANCION YA EXISTE EN EL SERVIDOR");
 						}
 						else 
 						{
-							//System.out.println("preparando para subir cancion");
-							//AQUI PONER------------------------------------------------
+							//El cliente introduce el nombre del autor:
 							String autor = JOptionPane.showInputDialog(contentPane, "Autor:");
 							while(autor==null || autor.isBlank())
 							{
 								autor = JOptionPane.showInputDialog(contentPane, "Autor:");
 							}
+							
+							//El cliente introduce el nombre de la cancion:
 							String tituloCancion = JOptionPane.showInputDialog(contentPane, "Titulo de la cancion:");
 							while(tituloCancion==null || tituloCancion.isBlank())
 							{
 								tituloCancion = JOptionPane.showInputDialog(contentPane, "Titulo de la cancion:");
 							}
+							
+							//Se sube la cancion:
 							cliente.subirCancion(fichero,autor+" - "+tituloCancion);
-							//System.out.println("cancion subida");
-
 							JOptionPane.showInternalMessageDialog(contentPane, "CANCION SUBIDA EXITOSAMENTE");
-
-						}
-						
+						}	
 					}
 					else
 					{
 						JOptionPane.showInternalMessageDialog(contentPane, "NO SE HA SELECCIONADO NINGUNA CANCION");
 					}
-
 				}
 			});
 
@@ -292,21 +288,19 @@ public class Interfaz_Grafica extends JFrame {
 				}
 			});
 
-			//--------------//
+			
 
 			this.mostrarInterfaz();
 		}
-
-
-
-
-
 	}
 
 
 	private void buscarCancion(JTextField textbox, java.awt.List lista)
 	{
+		//Reiniciamos la lista:
 		lista.clear();
+		
+		//Añadimos a la lista las canciones encontradas:
 		List<String> l = this.cliente.listaCanciones(textbox.getText());
 		for(String s: l)
 		{
@@ -315,6 +309,7 @@ public class Interfaz_Grafica extends JFrame {
 	}
 	
 	private void volumen(JSlider volumen) 
+	//Le pasamos la barra de volumen y establece el volumen a ese nivel*/
 	{
 		File f = new File("cancion.mp3");
 
@@ -343,7 +338,9 @@ public class Interfaz_Grafica extends JFrame {
 			cliente.pausarCancion();
 			cliente.descargarCancion(s);
 			mostrarNombreCancionActualSonando(s);
+			
 			cliente.reproducirCancion();
+			
 
 		}	
 	}
@@ -367,7 +364,9 @@ public class Interfaz_Grafica extends JFrame {
 			cliente.pausarCancion();
 			cliente.descargarCancion(s);
 			mostrarNombreCancionActualSonando(s);
+			
 			cliente.reproducirCancion();
+			
 
 		}	
 	}
@@ -388,7 +387,9 @@ public class Interfaz_Grafica extends JFrame {
 			cliente.pausarCancion();
 			cliente.descargarCancion(s);
 			mostrarNombreCancionActualSonando(s);
+			
 			cliente.reproducirCancion();
+				
 		}
 	}
 

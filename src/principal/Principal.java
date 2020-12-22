@@ -11,10 +11,10 @@ public class Principal
 {
 	
 
-	public static void main(String[] args) throws UnknownHostException, IOException, BasicPlayerException {
+	public static void main(String[] args) {
 		
-		Cliente c =  new Cliente("localhost", 5555);
-		Interfaz_Grafica grafica = new Interfaz_Grafica(c);
+		Cliente c =  new Cliente("localhost", 5555); //Iniciamos el cliente
+		Interfaz_Grafica grafica = new Interfaz_Grafica(c); //Llamamos a la interfaz gráfica
 	}
 
 }
