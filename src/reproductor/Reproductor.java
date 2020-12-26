@@ -1,10 +1,7 @@
 package reproductor;
 
-import java.io.File;
-import java.io.InputStream;
-
-import javazoom.jlgui.basicplayer.BasicPlayer;
-import javazoom.jlgui.basicplayer.BasicPlayerException;
+import java.io.*;
+import javazoom.jlgui.basicplayer.*;
 
 
 
@@ -46,21 +43,6 @@ public class Reproductor extends Thread
 		} catch (BasicPlayerException e) {
 			e.printStackTrace();
 		} 
-		/*
-		this.reproductor.play();
-		Thread tarray[] = new Thread[Thread.activeCount()-1];
-		int anterior = Thread.activeCount();
-		Thread.enumerate(tarray);
-		
-		Thread hilo = tarray[3];
-		String s= hilo.getState().toString();
-		while(!s.equals("TERMINATED"))//ESPERA A QUE TERMINE
-		{
-			s =tarray[3].getState().toString();
-		}
-		
-		//System.out.println("---------------")
-		throws new Exception("cancionTerminada");//devuelve true cuando termina; */
 		
 	}
 	

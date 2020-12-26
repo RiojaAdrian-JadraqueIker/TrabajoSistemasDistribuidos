@@ -12,8 +12,6 @@ import java.util.concurrent.Executors;
 
 public class Servidor 
 {
-
-
 	public static void main(String args[]) 
 	{
 		
@@ -27,7 +25,6 @@ public class Servidor
 					Socket servidor = conexion.accept();
 					AtenderPeticion peticion = new AtenderPeticion(servidor);
 					pool.execute(peticion);
-
 				}
 				catch(IOException e)
 				{

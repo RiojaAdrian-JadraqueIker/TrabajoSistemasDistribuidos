@@ -2,23 +2,9 @@ package cliente;
 
 
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-
-import java.net.Socket;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JFrame;
-
+import java.io.*;
+import java.net.*;
+import java.util.*;
 import reproductor.Reproductor;
 
 
@@ -32,7 +18,6 @@ public class Cliente
 	private Reproductor reproductor;
 	private DataInputStream mensajesEntrada;
 	private PrintStream mensajesSalida;
-	private Socket cliente;
 
 
 	public Cliente(String host, int puerto) {
@@ -48,7 +33,7 @@ public class Cliente
 		boolean b = false;
 		try 
 		{
-			this.cliente = new Socket(this.host, this.puerto);
+			Socket cliente = new Socket(this.host, this.puerto);
 			this.mensajesEntrada = new DataInputStream(cliente.getInputStream());
 			this.mensajesSalida = new PrintStream(cliente.getOutputStream());
 			b= true;
@@ -66,6 +51,29 @@ public class Cliente
 	{
 		this.mensajesSalida.println(3);
 		this.mensajesSalida.flush();
+		
+		if(this.mensajesEntrada!=null)
+		{
+			try
+			{
+				this.mensajesEntrada.close();
+			}
+			catch(IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		if(this.mensajesSalida!=null)
+		{
+			try
+			{
+				this.mensajesSalida.close();
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public List<String> listaCanciones(String busqueda) {
@@ -131,6 +139,8 @@ public class Cliente
 		
 		return lista;	
 	}
+	
+	
 	public boolean yaExiste(File f) {
 		try(FileInputStream fichero = new FileInputStream(f);)
 		{
@@ -192,10 +202,6 @@ public class Cliente
 	{
 		try(FileInputStream fichero = new FileInputStream(f);)
 		{
-			
-			//String nombreSinExtension = f.getName().substring(0, f.getName().length()-4);
-			//System.out.println(nombreSinExtension);
-			
 			this.mensajesSalida.println(2);
 			this.mensajesSalida.println(nombre);
 			this.mensajesSalida.println(f.length());

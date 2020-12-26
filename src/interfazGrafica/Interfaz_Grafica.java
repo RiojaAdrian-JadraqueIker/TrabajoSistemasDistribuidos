@@ -1,8 +1,7 @@
 package interfazGrafica;
 
-
-
 import javax.swing.JFrame;
+
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -11,45 +10,28 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import cliente.Cliente;
 
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
 
-
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-import java.awt.Font;
-import java.awt.GridLayout;
-
-import javax.swing.JRadioButton;
-import javax.swing.JSlider;
-import javax.swing.SwingConstants;
-
-
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.List;
-import java.util.Random;
-import java.awt.event.ActionEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ChangeEvent;
-import java.awt.Color;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
+import javax.swing.event.*;
 
 public class Interfaz_Grafica extends JFrame {
 
 	private JPanel contentPane;
 	private Cliente cliente;
 	private JTextField tbNombreCancionActual;
-	
-
+	private String itemAnterior = "";
 
 
 	public Interfaz_Grafica(Cliente c)
 	{
+
 		setResizable(false);
 
-		
+
 		//F es el archivo donde se almacenara la cancion a reproducir:
 		File f = new File("cancion.mp3");
 		if(f.exists())
@@ -111,7 +93,7 @@ public class Interfaz_Grafica extends JFrame {
 			JButton btSubirCancion = new JButton("Subir cancion");
 			btSubirCancion.setBounds(38, 79, 156, 23);
 			panelAcciones.add(btSubirCancion);
-			
+
 
 			JButton btSalir = new JButton("Salir");
 			btSalir.setBackground(new Color(250, 128, 114));
@@ -119,11 +101,11 @@ public class Interfaz_Grafica extends JFrame {
 			btSalir.setForeground(Color.WHITE);
 			btSalir.setBounds(38, 181, 156, 23);
 			panelAcciones.add(btSalir);
-			
+
 			JTextField tbBuscarCancion = new JTextField();
 			tbBuscarCancion.setBounds(38, 113, 156, 23);
 			panelAcciones.add(tbBuscarCancion);
-			
+
 			JButton btBuscarCancion = new JButton("Buscar cancion");
 			btBuscarCancion.setBounds(38, 147, 156, 23);
 			panelAcciones.add(btBuscarCancion);
@@ -163,19 +145,17 @@ public class Interfaz_Grafica extends JFrame {
 			contentPane.add(lblNewLabel);
 
 
-
-
 			//-----------------------------------
 			//---------------EVENTOS-------------	
 			//-----------------------------------
-			
+
 			btBuscarCancion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) 
 				{
 					buscarCancion(tbBuscarCancion, lista);
 				}
 			});
-			
+
 			btSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) 
 				{
@@ -188,7 +168,20 @@ public class Interfaz_Grafica extends JFrame {
 			btPLay.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) 
 				{
-					clickPlay();
+					if(!itemAnterior.equals((lista.getSelectedItem())))
+					{
+						String s =lista.getSelectedItem();
+						cliente.pausarCancion();
+						cliente.descargarCancion(s);
+						mostrarNombreCancionActualSonando(s);
+						cliente.reproducirCancion();
+						itemAnterior = s;
+					}
+					else
+					{
+						clickPlay();
+					}
+					
 				}
 			});
 
@@ -203,8 +196,8 @@ public class Interfaz_Grafica extends JFrame {
 			btMostrarCanciones.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) 
 				{
-						tbBuscarCancion.setText("");
-						clickMostrarCanciones(lista,volumen);					
+					tbBuscarCancion.setText("");
+					clickMostrarCanciones(lista,volumen);					
 				}
 			});
 
@@ -216,7 +209,7 @@ public class Interfaz_Grafica extends JFrame {
 					//Comprobamos que el cliente ha seleccionado un archivo valido (mp3)
 					if(fichero!=null && fichero.getName().endsWith("mp3"))
 					{
-						
+
 						//Comprobamos si la canción existe:
 						if (cliente.yaExiste(fichero)) {
 							JOptionPane.showInternalMessageDialog(contentPane, "LA CANCION YA EXISTE EN EL SERVIDOR");
@@ -229,14 +222,14 @@ public class Interfaz_Grafica extends JFrame {
 							{
 								autor = JOptionPane.showInputDialog(contentPane, "Autor:");
 							}
-							
+
 							//El cliente introduce el nombre de la cancion:
 							String tituloCancion = JOptionPane.showInputDialog(contentPane, "Titulo de la cancion:");
 							while(tituloCancion==null || tituloCancion.isBlank())
 							{
 								tituloCancion = JOptionPane.showInputDialog(contentPane, "Titulo de la cancion:");
 							}
-							
+
 							//Se sube la cancion:
 							cliente.subirCancion(fichero,autor+" - "+tituloCancion);
 							JOptionPane.showInternalMessageDialog(contentPane, "CANCION SUBIDA EXITOSAMENTE");
@@ -288,7 +281,6 @@ public class Interfaz_Grafica extends JFrame {
 				}
 			});
 
-			
 
 			this.mostrarInterfaz();
 		}
@@ -299,15 +291,15 @@ public class Interfaz_Grafica extends JFrame {
 	{
 		//Reiniciamos la lista:
 		lista.clear();
-		
+
 		//Añadimos a la lista las canciones encontradas:
-		List<String> l = this.cliente.listaCanciones(textbox.getText());
+		java.util.List<String> l = this.cliente.listaCanciones(textbox.getText());
 		for(String s: l)
 		{
 			lista.add(s);
 		}
 	}
-	
+
 	private void volumen(JSlider volumen) 
 	//Le pasamos la barra de volumen y establece el volumen a ese nivel*/
 	{
@@ -338,9 +330,9 @@ public class Interfaz_Grafica extends JFrame {
 			cliente.pausarCancion();
 			cliente.descargarCancion(s);
 			mostrarNombreCancionActualSonando(s);
-			
 			cliente.reproducirCancion();
-			
+			this.itemAnterior = s;
+
 
 		}	
 	}
@@ -364,9 +356,9 @@ public class Interfaz_Grafica extends JFrame {
 			cliente.pausarCancion();
 			cliente.descargarCancion(s);
 			mostrarNombreCancionActualSonando(s);
-			
+			this.itemAnterior = s;
 			cliente.reproducirCancion();
-			
+
 
 		}	
 	}
@@ -387,9 +379,9 @@ public class Interfaz_Grafica extends JFrame {
 			cliente.pausarCancion();
 			cliente.descargarCancion(s);
 			mostrarNombreCancionActualSonando(s);
-			
+			this.itemAnterior = s;
 			cliente.reproducirCancion();
-				
+
 		}
 	}
 
@@ -418,10 +410,11 @@ public class Interfaz_Grafica extends JFrame {
 	private void clickPlay()
 	{
 		File f = new File("cancion.mp3");
-
 		if(f.exists()) 
 		{
 			this.cliente.reanudarCancion();
+			//Thread hilo = new Thread(sonando);
+			//hilo.start();
 		}
 
 	}
@@ -435,7 +428,7 @@ public class Interfaz_Grafica extends JFrame {
 
 	private void clickMostrarCanciones(java.awt.List lista,JSlider volumen )
 	{
-		List<String> listaCanciones = this.cliente.listaCanciones();
+		java.util.List<String> listaCanciones = this.cliente.listaCanciones();
 
 		lista.clear(); // limpìamos la lista por si habia algo ya para asi actualizar
 		for(String s: listaCanciones)
@@ -454,6 +447,7 @@ public class Interfaz_Grafica extends JFrame {
 					mostrarNombreCancionActualSonando(s);
 					cliente.reproducirCancion();
 					volumen(volumen);
+					itemAnterior = s;
 				}
 			});
 		}
