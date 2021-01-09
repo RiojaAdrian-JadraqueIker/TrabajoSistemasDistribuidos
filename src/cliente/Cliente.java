@@ -1,13 +1,9 @@
 package cliente;
 
-
-
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import reproductor.Reproductor;
-
-
 
 //
 public class Cliente
